@@ -18,9 +18,9 @@ export default async function handler(req, res) {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     
-    // Using gemini-3.6-pro as a fallback for high demand
+    // Using gemini-3.6-flash as the fast, standard model
     const response = await ai.models.generateContent({
-        model: 'gemini-3.6-pro',
+        model: 'gemini-3.6-flash',
         contents: [
             {
                 role: 'user',
