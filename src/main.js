@@ -615,29 +615,7 @@ function initChatWidget() {
     }
   });
 
-  const responseMap = {
-    tech: "I specialize in JavaScript/TypeScript, React, Vite, GSAP animation physics, Lenis smooth scrolling, CSS architecture, and creative interactive web applications.",
-    bg: "I'm Patrick John, a creative developer focused on crafting tactile web experiences, interactive 3D/2D animation systems, and high-performance frontend interfaces.",
-    site: "This portfolio was built with Vite, GSAP for spring & step physics, Lenis for momentum scrolling, and custom pixel typography inspired by ToyFight's iconic design language.",
-    collab: "I'm always open to new projects! Send me an email at patrick80361@gmail.com, or reach out on LinkedIn (patrickjohn01) or Instagram (@mr.faaj)."
-  };
 
-  function getBotResponse(userText) {
-    const text = userText.toLowerCase();
-    if (text.includes('tech') || text.includes('stack') || text.includes('tool')) {
-      return responseMap.tech;
-    }
-    if (text.includes('background') || text.includes('who') || text.includes('experience') || text.includes('about')) {
-      return responseMap.bg;
-    }
-    if (text.includes('site') || text.includes('built') || text.includes('made') || text.includes('how')) {
-      return responseMap.site;
-    }
-    if (text.includes('contact') || text.includes('collab') || text.includes('email') || text.includes('hire') || text.includes('touch')) {
-      return responseMap.collab;
-    }
-    return `Thanks for asking! I'm Patrick John, creative frontend developer. Feel free to explore my projects or reach out directly at patrick80361@gmail.com!`;
-  }
 
   function appendMessage(text, sender = 'user') {
     if (!chatMessages) return;
@@ -652,7 +630,7 @@ function initChatWidget() {
     }
   }
 
-  function showTypingAndReply(replyText) {
+  async function showTypingAndReply(userText) {
     if (!chatMessages) return;
     const typing = document.createElement('div');
     typing.className = 'tf-msg bot tf-typing-indicator';
@@ -664,10 +642,25 @@ function initChatWidget() {
       chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText })
+      });
+      const data = await response.json();
+      
       if (typing.parentNode) typing.remove();
-      appendMessage(replyText, 'bot');
-    }, 650);
+      
+      if (data.reply) {
+        appendMessage(data.reply, 'bot');
+      } else {
+        appendMessage("I'm currently away or my AI isn't waking up properly. Feel free to email me at patrick80361@gmail.com!", 'bot');
+      }
+    } catch (err) {
+      if (typing.parentNode) typing.remove();
+      appendMessage("Something went wrong connecting to my brain! Email me at patrick80361@gmail.com.", 'bot');
+    }
   }
 
   function handleSend(text) {
@@ -675,8 +668,7 @@ function initChatWidget() {
     if (!trimmed) return;
 
     appendMessage(trimmed, 'user');
-    const reply = getBotResponse(trimmed);
-    showTypingAndReply(reply);
+    showTypingAndReply(trimmed);
   }
 
   promptChips.forEach((chip) => {
