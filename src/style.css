@@ -2026,7 +2026,6 @@ body.light-mode .tf-chat-bottom-close-btn {
   position: relative;
   width: 100%;
   min-height: 100svh;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 100px 5%;
