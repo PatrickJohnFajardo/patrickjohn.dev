@@ -655,6 +655,7 @@ function initChatWidget() {
       if (data.reply) {
         appendMessage(data.reply, 'bot');
       } else {
+        console.error("Chat API returned an error:", data.error || data);
         appendMessage("I'm currently away or my AI isn't waking up properly. Feel free to email me at patrick80361@gmail.com!", 'bot');
       }
     } catch (err) {
