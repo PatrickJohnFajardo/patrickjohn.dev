@@ -585,7 +585,9 @@ function initChatWidget() {
     chatModal.setAttribute('aria-hidden', 'false');
     triggerBtn.style.display = 'none';
     if (bottomCloseBtn) bottomCloseBtn.style.display = 'inline-flex';
-    if (chatInput) chatInput.focus();
+    if (chatInput && window.innerWidth > 768) {
+      chatInput.focus();
+    }
   }
 
   function closeChat() {
