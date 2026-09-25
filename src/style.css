@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&family=Geist:wght@400;500&display=swap');
+
 @font-face {
   font-family: 'PixelatedElegance';
   src: url('/PixelatedEleganceRegular-ovawB.woff') format('woff'),
@@ -27,11 +29,11 @@
   --loader-bg: var(--loader-bg-dark);
   --accent-color: #f1c40f;
   
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
 }
 
 *, body, button, input, textarea, select {
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
 }
 
 body.light-mode {
@@ -45,6 +47,11 @@ body.light-mode {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+::selection {
+  background-color: var(--text-color);
+  color: var(--bg-color);
 }
 
 body {
@@ -148,7 +155,7 @@ body.menu-open.light-mode .tf-logo-box {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'PixelatedElegance', monospace, sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.95rem;
   font-weight: normal;
   display: inline-flex;
@@ -186,7 +193,7 @@ body.menu-open.light-mode .tf-logo-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.78rem;
   letter-spacing: 1.2px;
   line-height: 1;
@@ -226,7 +233,7 @@ body.menu-open.light-mode .tf-logo-box {
 }
 
 .tf-logo-text {
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.78rem;
   letter-spacing: 1.2px;
   line-height: 1;
@@ -253,7 +260,7 @@ body.menu-open.light-mode .tf-logo-box {
   cursor: pointer;
   outline: none;
   color: var(--text-color);
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
 }
 
 .tf-mobile-menu-btn .tf-btn-box {
@@ -453,7 +460,7 @@ body.light-mode .theme-toggle-btn {
   color: #0d0d0e;
   padding: 6px 10px;
   border-radius: 4px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   letter-spacing: 0.6px;
   line-height: 1.2;
@@ -499,7 +506,7 @@ body.light-mode .tf-theme-bubble::before {
   border-radius: 3px;
   margin-left: 4px;
   font-size: 0.65rem;
-  font-family: 'PixelatedElegance', monospace, sans-serif;
+  font-family: 'Geist', sans-serif;
 }
 
 body.light-mode .tf-bubble-key {
@@ -804,7 +811,7 @@ body.light-mode .project-card:hover {
 .tf-pill-text {
   position: relative;
   z-index: 2;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 700;
   font-size: 0.72rem;
   letter-spacing: 1.5px;
@@ -1077,7 +1084,7 @@ body.light-mode .project-card:hover {
     cursor: pointer;
     outline: none;
     color: var(--text-color);
-    font-family: 'PixelatedElegance', sans-serif;
+    font-family: 'Geist', sans-serif;
     pointer-events: auto;
   }
 
@@ -1224,7 +1231,7 @@ body.light-mode .tf-mobile-overlay {
   align-items: center;
   justify-content: center;
   padding: 14px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 1.4rem;
   letter-spacing: 1px;
   color: #000000 !important;
@@ -1305,7 +1312,7 @@ body.light-mode .tf-mobile-overlay {
 
 .tf-footer-badge {
   display: inline-block;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.62rem;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -1330,7 +1337,7 @@ body:not(.light-mode) .tf-footer-badge {
 .tf-footer-links {
   display: flex;
   gap: 18px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
 }
 
@@ -1349,12 +1356,12 @@ body:not(.light-mode) .tf-footer-badge {
 }
 
 .tf-footer-email {
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
 }
 
 .tf-overlay-copyright {
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.8px;
   opacity: 0.7;
@@ -1404,7 +1411,7 @@ body:not(.light-mode) .tf-site-footer {
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.95rem;
   letter-spacing: 0.8px;
   background: #ffffff !important;
@@ -1434,7 +1441,7 @@ body:not(.light-mode) .tf-site-footer {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
   letter-spacing: 0.5px;
   gap: 20px;
@@ -1452,15 +1459,32 @@ body:not(.light-mode) .tf-site-footer {
   opacity: 0.85;
 }
 
-.tf-footer-policy {
+.tf-footer-link {
   color: inherit;
   text-decoration: none;
-  transition: opacity 0.2s;
+  display: inline-block;
 }
 
-.tf-footer-policy:hover {
-  text-decoration: underline;
-  opacity: 1;
+.tf-footer-link .tf-btn-mask {
+  display: block;
+  height: 0.72rem;
+  line-height: 0.72rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.tf-footer-link .tf-btn-slide {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: normal;
+  font-family: 'Geist', sans-serif !important;
+  line-height: 0.72rem;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  color: inherit;
+}
+
+.tf-footer-link:hover .tf-btn-slide {
+  transform: translateY(-100%);
 }
 
 .tf-footer-center {
@@ -1468,7 +1492,7 @@ body:not(.light-mode) .tf-site-footer {
 }
 
 .tf-footer-center .tf-footer-badge {
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.65rem;
   padding: 4px 12px;
   background: #ffffff !important;
@@ -1482,15 +1506,12 @@ body:not(.light-mode) .tf-site-footer {
 }
 
 .tf-footer-right a {
-  color: inherit;
-  text-decoration: none;
   opacity: 0.85;
   transition: opacity 0.2s;
 }
 
 .tf-footer-right a:hover {
   opacity: 1;
-  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
@@ -1529,6 +1550,15 @@ body:not(.light-mode) .tf-site-footer {
 }
 
 /* --- Floating Chat Widget (Chat with Patrick) --- */
+/* --- Chat Widget Typography Override --- */
+.tf-chat-widget,
+.tf-chat-widget *,
+.tf-chat-widget button,
+.tf-chat-widget input {
+  font-family: "Geist", sans-serif !important;
+  font-size: 14px;
+}
+
 .tf-chat-widget {
   position: fixed !important;
   bottom: 24px !important;
@@ -1539,7 +1569,7 @@ body:not(.light-mode) .tf-site-footer {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   pointer-events: auto;
 }
 
@@ -1549,7 +1579,7 @@ body:not(.light-mode) .tf-site-footer {
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 4px;
   padding: 10px 18px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.76rem;
   letter-spacing: 0.8px;
   display: inline-flex;
@@ -1656,7 +1686,7 @@ body.light-mode .tf-chat-header {
   align-items: center;
   justify-content: center;
   position: relative;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
   font-weight: bold;
   flex-shrink: 0;
@@ -1696,16 +1726,14 @@ body.light-mode .tf-online-dot {
 }
 
 .tf-chat-name {
-  font-family: 'PixelatedElegance', sans-serif;
-  font-size: 0.84rem;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 500;
   margin: 0;
   line-height: 1.2;
 }
 
 .tf-chat-subtitle {
-  font-family: 'PixelatedElegance', sans-serif;
-  font-size: 0.56rem;
+  font-size: 10px;
   letter-spacing: 1px;
   opacity: 0.6;
   text-transform: uppercase;
@@ -1762,8 +1790,9 @@ body.light-mode .tf-chat-action-btn:hover {
   color: inherit;
   border-radius: 4px;
   padding: 10px 12px;
-  font-family: 'PixelatedElegance', sans-serif;
-  font-size: 0.68rem;
+  font-family: "Geist Mono", monospace !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
   line-height: 1.4;
   text-align: left;
   cursor: pointer;
@@ -1798,7 +1827,7 @@ body.light-mode .tf-prompt-chip:hover {
   display: flex;
   flex-direction: column;
   max-width: 88%;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
   line-height: 1.45;
   border-radius: 6px;
@@ -1890,7 +1919,7 @@ body.light-mode .tf-chat-input-row {
   border-radius: 4px;
   padding: 9px 12px;
   color: inherit;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.72rem;
   outline: none;
   transition: border-color 0.2s, background-color 0.2s;
@@ -1940,7 +1969,7 @@ body.light-mode .tf-chat-send-btn {
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 4px;
   padding: 8px 16px;
-  font-family: 'PixelatedElegance', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.74rem;
   letter-spacing: 0.6px;
   display: inline-flex;
@@ -2211,4 +2240,19 @@ body.dark-mode .tf-projects-footer {
     flex-direction: column;
     height: 60vh;
   }
+}
+
+/* --- Pixelated Font Overrides for Shapes --- */
+.tf-nav-btn,
+.tf-btn-slide,
+.tf-logo-terminal,
+.tf-logo-text,
+.tf-stat-badge,
+.tf-footer-badge,
+.tf-pill-item,
+.tf-pill-title,
+.tf-filter-list li,
+.hero-title,
+.hero-subtitle {
+  font-family: 'PixelatedElegance', sans-serif !important;
 }
