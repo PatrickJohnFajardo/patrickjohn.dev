@@ -106,7 +106,7 @@ html {
   align-items: center;
   justify-content: center;
   height: 32px;
-  width: 44px;
+  width: 32px;
   border-radius: 4px;
   background: #ffffff !important;
   color: #000000 !important;
@@ -2057,15 +2057,15 @@ body.light-mode .tf-chat-bottom-close-btn {
   min-height: 100svh;
   flex-direction: column;
   justify-content: center;
-  padding: 100px 5%;
+  padding: 150px 4% 80px;
   box-sizing: border-box;
 }
 
 .tf-projects-header {
   position: absolute;
-  top: 100px;
-  left: 5%;
-  right: 5%;
+  top: 160px;
+  left: 4%;
+  right: 4%;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -2075,16 +2075,16 @@ body.light-mode .tf-chat-bottom-close-btn {
 .tf-projects-title-area {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .tf-pill-title {
   display: inline-block;
   background-color: #efefef;
   color: #111;
-  padding: 5px 20px;
-  border-radius: 30px;
-  font-size: 48px;
+  padding: 4px 18px;
+  border-radius: 24px;
+  font-size: 37px;
   line-height: 1;
   width: max-content;
 }
@@ -2095,21 +2095,26 @@ body.dark-mode .tf-pill-title {
 }
 
 .tf-project-count {
-  font-size: 24px;
+  font-size: 20px;
   color: #555;
-  margin-left: 10px;
+  margin-left: 8px;
   vertical-align: super;
 }
 
 .tf-projects-filter {
   text-align: left;
-  font-family: monospace;
 }
 
 .tf-filter-label {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: #555;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  color: #777;
+  font-family: 'Geist Mono', monospace;
+}
+
+body.dark-mode .tf-filter-label {
+  color: #888;
 }
 
 .tf-filter-list {
@@ -2118,103 +2123,193 @@ body.dark-mode .tf-pill-title {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 6px;
 }
 
 .tf-filter-list li {
-  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Filter Button - Square resting shape, morphs to Round Pill on hover, and stays Round Pill when selected/active */
+.tf-filter-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
-  padding: 4px 10px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  color: #111;
+  outline: none;
+  display: inline-flex;
+  text-decoration: none;
+  color: var(--text-color);
+  font-family: 'PixelatedElegance', sans-serif !important;
 }
 
-body.dark-mode .tf-filter-list li {
-  color: #eee;
-}
-
-.tf-filter-list li.active {
-  background-color: #111;
-  color: #fff;
-}
-
-body.dark-mode .tf-filter-list li.active {
-  background-color: #eee;
-  color: #111;
-}
-
-/* Carousel / Expanding Accordion */
-.tf-projects-carousel {
-  display: flex;
-  width: 100%;
-  height: 250px;
-  margin-top: 50px;
-  gap: 5px;
-}
-
-.tf-project-item {
-  flex: 1;
-  background-color: #000;
-  position: relative;
-  transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
+.tf-filter-btn .tf-btn-box {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 5px 10px;
+  border: none;
+  background: #202022;
+  color: var(--text-color);
+  border-radius: 2px;
+  transition: border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  will-change: border-radius, transform;
 }
 
-.tf-project-item:hover {
-  flex: 3;
+body.light-mode .tf-filter-btn .tf-btn-box {
+  background: #e2e2e6;
+  color: #111111;
 }
 
-.tf-project-image {
+.tf-filter-btn .tf-btn-mask {
+  display: block;
+  height: 11px;
+  line-height: 11px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tf-filter-btn .tf-btn-slide {
+  display: block;
+  font-size: 10px;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  line-height: 11px;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  color: inherit;
+  opacity: 1;
+}
+
+.tf-filter-btn .tf-btn-slide:nth-child(2) {
+  color: inherit;
+  font-weight: normal;
+  opacity: 1;
+}
+
+/* Hover on Inactive: morph square into round pill shape + rolling effect */
+.tf-filter-btn:hover .tf-btn-box {
+  border-radius: 18px;
+  background: #2c2c30;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+body.light-mode .tf-filter-btn:hover .tf-btn-box {
+  background: #d4d4d8;
+  color: #000000;
+}
+
+.tf-filter-btn:hover .tf-btn-slide {
+  transform: translateY(-100%);
+}
+
+/* Selected / Active State: Always round pill shape */
+.tf-filter-btn.active .tf-btn-box {
+  background-color: #ffffff;
+  color: #0d0d0e;
+  border-radius: 18px;
+}
+
+body.light-mode .tf-filter-btn.active .tf-btn-box {
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 18px;
+}
+
+.tf-filter-btn.active .tf-btn-slide {
+  color: #0d0d0e;
+}
+
+body.light-mode .tf-filter-btn.active .tf-btn-slide {
+  color: #ffffff;
+}
+
+.tf-filter-btn.active:hover .tf-btn-box {
+  border-radius: 18px;
+  background-color: #ffffff;
+  color: #0d0d0e;
+  transform: translateY(-1px);
+}
+
+body.light-mode .tf-filter-btn.active:hover .tf-btn-box {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Projects Section Three.js WebGL WorkItemRow */
+.tf-projects-work-row {
+  position: relative;
+  width: 100%;
+  margin-top: 110px;
+  cursor: default;
+}
+
+.tf-projects-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  pointer-events: auto;
+  border-radius: 4px;
+}
+
+.tf-projects-webgl-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#projects-webgl-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.tf-project-hover-pill {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-
-.tf-project-item:hover .tf-project-image {
-  opacity: 1;
-}
-
-.tf-project-info {
-  position: absolute;
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: all 0.4s ease;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.tf-project-item:hover .tf-project-info {
-  opacity: 1;
-  transform: translateX(0);
-  transition-delay: 0.2s;
-}
-
-.tf-project-pill {
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #000;
-  padding: 8px 20px;
+  transform: translate(0, -50%) scale(0.85);
+  background: #ffffff;
+  color: #000000;
+  padding: 6px 18px;
   border-radius: 30px;
-  font-size: 20px;
-  font-weight: bold;
+  font-family: 'PixelatedElegance', sans-serif !important;
+  font-size: 14px;
+  font-weight: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  will-change: left, top, transform, opacity;
+}
+
+body.light-mode .tf-project-hover-pill {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+}
+
+.tf-project-hover-pill.visible {
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
 }
 
 .tf-projects-footer {
   position: absolute;
   bottom: 40px;
-  left: 5%;
-  font-size: 14px;
-  font-family: monospace;
+  left: 4%;
+  font-size: 18px;
+  font-family: 'PixelatedElegance', sans-serif;
   color: #111;
 }
 
@@ -2251,7 +2346,9 @@ body.dark-mode .tf-projects-footer {
 .tf-footer-badge,
 .tf-pill-item,
 .tf-pill-title,
-.tf-filter-list li,
+.tf-filter-btn,
+.tf-filter-btn .tf-btn-slide,
+.tf-projects-footer,
 .hero-title,
 .hero-subtitle {
   font-family: 'PixelatedElegance', sans-serif !important;

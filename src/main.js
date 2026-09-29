@@ -60,6 +60,8 @@ function playPageTransition(targetSelector = null, isInitial = false) {
   if (isTransitioning) return;
   isTransitioning = true;
 
+  const activeTarget = targetSelector || getActiveSection();
+
   const mask = document.getElementById('transition-mask');
   if (mask) mask.style.display = 'flex';
 
@@ -67,13 +69,14 @@ function playPageTransition(targetSelector = null, isInitial = false) {
     onComplete: () => {
       if (mask) mask.style.display = 'none';
       isTransitioning = false;
+      updateActiveNav(activeTarget);
+      
       if (isInitial) {
-        initAnimations();
-      } else if (targetSelector) {
-        updateActiveNav(targetSelector);
-        const targetEl = document.querySelector(targetSelector);
+        initAnimations(activeTarget);
+      } else {
+        const targetEl = document.querySelector(activeTarget);
         if (targetEl) {
-          const content = targetEl.querySelector('.content');
+          const content = targetEl.querySelector('.content') || targetEl.querySelector('.tf-projects-header');
           if (content) {
             gsap.fromTo(content, 
               { y: 40, opacity: 0 }, 
@@ -82,8 +85,8 @@ function playPageTransition(targetSelector = null, isInitial = false) {
           }
         }
         
-        if (targetSelector === '#home') {
-          initAnimations();
+        if (activeTarget === '#home') {
+          initAnimations('#home');
         }
       }
     }
@@ -112,24 +115,37 @@ function playPageTransition(targetSelector = null, isInitial = false) {
   })
   // 2. While screen is fully covered by wave, switch the page and active nav instantly
   .add(() => {
-    if (targetSelector) {
-      const targetEl = document.querySelector(targetSelector);
-      if (targetEl) {
-        // Hide all panels
-        document.querySelectorAll('.panel').forEach(panel => {
-          panel.style.display = 'none';
-        });
-        // Show target panel
-        targetEl.style.display = 'flex';
-        
-        lenis.scrollTo(0, { immediate: true, force: true });
-        window.scrollTo(0, 0);
-        updateActiveNav(targetSelector);
+    const targetEl = document.querySelector(activeTarget);
+    if (targetEl) {
+      // Hide all panels
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.style.display = 'none';
+      });
+      // Show target panel
+      targetEl.style.display = 'flex';
+      
+      lenis.scrollTo(0, { immediate: true, force: true });
+      window.scrollTo(0, 0);
+      updateActiveNav(activeTarget);
+
+      if (activeTarget === '#projects' && typeof updateProjects3DLayout === 'function') {
+        updateProjects3DLayout();
       }
-      if (targetSelector === '#home') {
-        if (typeof laptopAnimationAction !== 'undefined' && laptopAnimationAction) {
-          laptopAnimationAction.stop();
+
+      try {
+        if (history.replaceState) {
+          history.replaceState(null, '', activeTarget);
+        } else {
+          window.location.hash = activeTarget;
         }
+        sessionStorage.setItem('active_section', activeTarget);
+      } catch (e) {}
+    }
+    if (activeTarget === '#home') {
+      if (typeof laptopAnimationAction !== 'undefined' && laptopAnimationAction) {
+        laptopAnimationAction.stop();
+      }
+      if (!isInitial) {
         // Reset UI immediately behind the mask so it can animate in again
         gsap.set('.tf-logo-link, .tf-theme-wrapper, .tf-mobile-menu-wrapper, .hero-title, .hero-subtitle', { opacity: 0, scale: 0.8 });
         gsap.set('.tf-nav-btn', { y: 40, opacity: 0 });
@@ -219,9 +235,23 @@ function playPageTransition(targetSelector = null, isInitial = false) {
   });
 }
 
+// Helper to determine initial section from URL hash or sessionStorage
+function getActiveSection() {
+  const hash = window.location.hash;
+  if (hash && document.querySelector(hash)) {
+    return hash;
+  }
+  const stored = sessionStorage.getItem('active_section');
+  if (stored && document.querySelector(stored)) {
+    return stored;
+  }
+  return '#home';
+}
+
 // Initial Page Load Preloader
 window.addEventListener('load', () => {
-  playPageTransition(null, true);
+  const initialTarget = getActiveSection();
+  playPageTransition(initialTarget, true);
 });
 
 // Page Navigation Click Handler (Trigger loading transition before navigating)
@@ -431,9 +461,27 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetId && targetId !== '#') {
         e.preventDefault();
         closeMobileOverlay();
+        try {
+          if (history.pushState) {
+            history.pushState(null, '', targetId);
+          } else {
+            window.location.hash = targetId;
+          }
+          sessionStorage.setItem('active_section', targetId);
+        } catch (err) {}
         playPageTransition(targetId, false);
       }
     });
+  });
+
+  window.addEventListener('popstate', () => {
+    const targetId = window.location.hash || '#home';
+    if (document.querySelector(targetId)) {
+      try {
+        sessionStorage.setItem('active_section', targetId);
+      } catch (err) {}
+      playPageTransition(targetId, false);
+    }
   });
 
   // Mobile Menu Toggle Button
@@ -511,20 +559,27 @@ let laptopAnimationAction = null;
 let globalLaptopGroup = null;
 let globalTargetScale = 1;
 
-function initAnimations() {
+function initAnimations(targetSelector = '#home') {
   isLoaderFinished = true;
   
-  if (globalLaptopGroup) {
-    gsap.fromTo(globalLaptopGroup.scale,
-      { x: 0.001, y: 0.001, z: 0.001 },
-      { x: globalTargetScale, y: globalTargetScale, z: globalTargetScale, duration: 1.4, ease: 'elastic.out(1, 0.75)' }
-    );
-  }
+  if (targetSelector === '#home') {
+    if (globalLaptopGroup) {
+      gsap.fromTo(globalLaptopGroup.scale,
+        { x: 0.001, y: 0.001, z: 0.001 },
+        { x: globalTargetScale, y: globalTargetScale, z: globalTargetScale, duration: 1.4, ease: 'elastic.out(1, 0.75)' }
+      );
+    }
 
-  if (laptopAnimationAction) {
-    setTimeout(() => {
-      laptopAnimationAction.play();
-    }, 3000);
+    if (laptopAnimationAction) {
+      setTimeout(() => {
+        laptopAnimationAction.play();
+      }, 3000);
+    }
+
+    // Hero texts zoom in
+    gsap.to('.hero-title, .hero-subtitle', {
+      scale: 1, opacity: 1, duration: 1, delay: 0.5, stagger: 0.1, ease: 'power3.out'
+    });
   }
 
   // Logo and Theme toggle zoom in
@@ -536,12 +591,20 @@ function initAnimations() {
   gsap.to('.tf-nav-btn', {
     y: 0, opacity: 1, duration: 0.8, delay: 0.6, stagger: 0.1, ease: 'back.out(1.5)'
   });
-
-  // Hero texts zoom in
-  gsap.to('.hero-title, .hero-subtitle', {
-    scale: 1, opacity: 1, duration: 1, delay: 0.5, stagger: 0.1, ease: 'power3.out'
-  });
   
+  if (targetSelector && targetSelector !== '#home') {
+    const targetEl = document.querySelector(targetSelector);
+    if (targetEl) {
+      const content = targetEl.querySelector('.content') || targetEl.querySelector('.tf-projects-header');
+      if (content) {
+        gsap.fromTo(content, 
+          { y: 40, opacity: 0 }, 
+          { y: 0, opacity: 1, duration: 0.8, delay: 0.4, ease: 'power3.out' }
+        );
+      }
+    }
+  }
+
   // Section scroll entrance animations (No automatic nav highlighting on scroll)
   const panels = document.querySelectorAll('.panel');
   panels.forEach((panel) => {
@@ -921,7 +984,505 @@ function initHero3D() {
   animate();
 }
 
+// --- 11. Three.js WebGL WorkItemRow (Interactive 3D Project Carousel) ---
+const PROJECTS_DATA = [
+  { 
+    title: 'Flim', 
+    category: 'Website', 
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+    color1: '#052e16',
+    color2: '#10b981'
+  },
+  { 
+    title: 'Metropole', 
+    category: 'Marketing', 
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+    color1: '#2e1065',
+    color2: '#a855f7'
+  },
+  { 
+    title: 'Drop', 
+    category: 'eCommerce', 
+    image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+    color1: '#451a03',
+    color2: '#f97316'
+  },
+  { 
+    title: 'Gaming Era', 
+    category: 'Website', 
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80',
+    color1: '#082f49',
+    color2: '#06b6d4'
+  },
+  { 
+    title: 'Pantheon', 
+    category: 'Branding', 
+    image: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80',
+    color1: '#3f2e06',
+    color2: '#eab308'
+  },
+  { 
+    title: 'Animate', 
+    category: 'Content', 
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80',
+    color1: '#4c0519',
+    color2: '#f43f5e'
+  },
+  { 
+    title: '3D Avatar', 
+    category: 'Website', 
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+    color1: '#1e1b4b',
+    color2: '#6366f1'
+  },
+  { 
+    title: 'AnyThing', 
+    category: 'Branding', 
+    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+    color1: '#0f172a',
+    color2: '#64748b'
+  },
+];
+
+let setProjectsFilter = null;
+let updateProjects3DLayout = null;
+
+function createProjectCanvasTexture(title, category, color1, color2) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 600;
+  canvas.height = 800;
+  const ctx = canvas.getContext('2d');
+
+  // Background Gradient
+  const grad = ctx.createLinearGradient(0, 0, 600, 800);
+  grad.addColorStop(0, color1);
+  grad.addColorStop(0.5, '#121214');
+  grad.addColorStop(1, color2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 600, 800);
+
+  // Subtle geometric grid/rings accent
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(300, 400, 220, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 40; i < 600; i += 40) {
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i, 800);
+    ctx.stroke();
+  }
+
+  // Category Tag Pill
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+  ctx.beginPath();
+  ctx.roundRect(40, 50, 160, 44, 22);
+  ctx.fill();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.fillText(category.toUpperCase(), 58, 78);
+
+  // Huge stylized project initial
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+  ctx.font = '900 240px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(title.charAt(0), 300, 480);
+
+  // Project title text
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 46px sans-serif';
+  ctx.fillText(title, 40, 720);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function initProjects3D() {
+  const canvas = document.getElementById('projects-webgl-canvas');
+  const container = document.getElementById('projects-webgl-container');
+  const hoverPill = document.getElementById('tf-project-hover-pill');
+  const hoverPillTitle = document.getElementById('tf-hover-pill-title');
+  const projectsSection = document.getElementById('projects');
+
+  if (!canvas || !container || !projectsSection) return;
+
+  let width = container.clientWidth || Math.round(window.innerWidth * 0.92);
+  let height = container.clientHeight || 320;
+  let isPointerInside = false;
+
+  // Scene & Orthographic Camera (1 unit = 1 pixel for exact layout)
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(
+    -width / 2, width / 2,
+    height / 2, -height / 2,
+    0.1, 1000
+  );
+  camera.position.z = 100;
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+    powerPreference: 'high-performance'
+  });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.setCrossOrigin('anonymous');
+
+  // Custom 3D Shaders for Wave & Distortion
+  const vertexShader = `
+    uniform float uHover;
+    uniform vec2 uMouse;
+    uniform float uTime;
+    varying vec2 vUv;
+    varying vec3 vPosition;
+
+    void main() {
+      vUv = uv;
+      vec3 pos = position;
+      
+      // 3D bulge & fluid curvature when hovered
+      float wave = sin(uv.x * 3.14159265) * sin(uv.y * 3.14159265);
+      float ripple = sin(pos.x * 0.03 + uTime * 2.5) * cos(pos.y * 0.03 + uTime * 2.0);
+      pos.z += wave * uHover * 30.0 + ripple * uHover * 6.0;
+      
+      // Slight 3D tilt tracking
+      pos.z += (uv.x - uMouse.x) * uHover * 12.0;
+
+      vPosition = pos;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    }
+  `;
+
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform float uHover;
+    uniform float uOpacity;
+    uniform float uTime;
+    varying vec2 vUv;
+
+    void main() {
+      vec2 uv = vUv;
+      
+      // Slight perspective lens zoom on hover
+      vec2 center = vec2(0.5);
+      vec2 warpedUv = center + (uv - center) * (1.0 - uHover * 0.06);
+      
+      // Chromatic aberration on hover
+      float r = texture2D(uTexture, warpedUv + vec2(uHover * 0.003, 0.0)).r;
+      float g = texture2D(uTexture, warpedUv).g;
+      float b = texture2D(uTexture, warpedUv - vec2(uHover * 0.003, 0.0)).b;
+      
+      vec3 color = vec3(r, g, b);
+      // Subtle sheen
+      color += uHover * 0.06;
+      
+      gl_FragColor = vec4(color, uOpacity);
+    }
+  `;
+
+  const numItems = PROJECTS_DATA.length;
+  const gap = 5;
+  const baseGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+
+  const items = PROJECTS_DATA.map((data) => {
+    // Start with instantaneous high-quality procedural texture
+    const fallbackTex = createProjectCanvasTexture(data.title, data.category, data.color1, data.color2);
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      uniforms: {
+        uTexture: { value: fallbackTex },
+        uHover: { value: 0.0 },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        uTime: { value: 0.0 },
+        uOpacity: { value: 1.0 }
+      }
+    });
+
+    // Load actual image asynchronously and swap
+    if (data.image) {
+      textureLoader.load(
+        data.image,
+        (loadedTex) => {
+          loadedTex.colorSpace = THREE.SRGBColorSpace;
+          loadedTex.generateMipmaps = true;
+          loadedTex.minFilter = THREE.LinearMipmapLinearFilter;
+          material.uniforms.uTexture.value = loadedTex;
+          material.needsUpdate = true;
+        },
+        undefined,
+        (err) => {
+          console.warn(`Fallback active for ${data.title}:`, err);
+        }
+      );
+    }
+
+    const mesh = new THREE.Mesh(baseGeometry, material);
+    scene.add(mesh);
+
+    return {
+      data,
+      mesh,
+      material,
+      currentWidth: 0,
+      targetWidth: 0,
+      currentX: 0,
+      targetX: 0,
+      hoverValue: 0,
+      targetHover: 0,
+      targetOpacity: 1.0,
+      currentOpacity: 1.0
+    };
+  });
+
+  let hoveredIndex = 0;
+  let mousePos = { x: 0.5, y: 0.5, canvasX: 0, canvasY: 0 };
+
+  function calculateLayout() {
+    const totalGap = (numItems - 1) * gap;
+    const availableWidth = width - totalGap;
+    const baseWidth = availableWidth / numItems;
+
+    if (hoveredIndex >= 0 && hoveredIndex < numItems) {
+      // Expanded width for hovered item
+      const isMobile = width < 768;
+      const expandFactor = isMobile ? 2.0 : 2.8;
+      const expandedWidth = Math.min(baseWidth * expandFactor, availableWidth * 0.45);
+      const remainingWidth = availableWidth - expandedWidth;
+      const shrunkWidth = remainingWidth / (numItems - 1);
+
+      let currentLeft = -width / 2;
+      items.forEach((item, i) => {
+        const itemWidth = i === hoveredIndex ? expandedWidth : shrunkWidth;
+        item.targetWidth = itemWidth;
+        item.targetX = currentLeft + itemWidth / 2;
+        item.targetHover = i === hoveredIndex ? 1.0 : 0.0;
+        currentLeft += itemWidth + gap;
+      });
+    } else {
+      let currentLeft = -width / 2;
+      items.forEach((item) => {
+        item.targetWidth = baseWidth;
+        item.targetX = currentLeft + baseWidth / 2;
+        item.targetHover = 0.0;
+        currentLeft += baseWidth + gap;
+      });
+    }
+  }
+
+  // Initial layout setting (instant on first run)
+  calculateLayout();
+  items.forEach((item) => {
+    item.currentWidth = item.targetWidth;
+    item.currentX = item.targetX;
+    item.mesh.scale.set(item.currentWidth, height, 1);
+    item.mesh.position.set(item.currentX, 0, 0);
+  });
+
+  function onPointerMove(e) {
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (x < 0 || x > rect.width || y < 0 || y > rect.height) {
+      onPointerLeave();
+      return;
+    }
+
+    const wasPointerInside = isPointerInside;
+    isPointerInside = true;
+    mousePos.canvasX = x;
+    mousePos.canvasY = y;
+    mousePos.x = x / rect.width;
+    mousePos.y = 1.0 - (y / rect.height);
+
+    // Hit-test using the actual visual boundary of each card so the expanded image stays active until pointer passes its edge
+    let foundIndex = -1;
+    for (let i = 0; i < numItems; i++) {
+      const item = items[i];
+      const itemLeft = item.targetX + (width / 2) - (item.targetWidth / 2);
+      const itemRight = itemLeft + item.targetWidth + (i < numItems - 1 ? gap : 0);
+
+      if (x >= itemLeft && x <= itemRight) {
+        foundIndex = i;
+        break;
+      }
+    }
+
+    if (foundIndex === -1) {
+      if (x <= 0) foundIndex = 0;
+      else if (x >= width) foundIndex = numItems - 1;
+    }
+
+    if (foundIndex !== -1 && (foundIndex !== hoveredIndex || !wasPointerInside)) {
+      hoveredIndex = foundIndex;
+      calculateLayout();
+
+      if (hoverPill && hoverPillTitle && items[hoveredIndex]) {
+        hoverPillTitle.textContent = items[hoveredIndex].data.title;
+        hoverPill.classList.add('visible');
+      }
+    }
+  }
+
+  function onPointerLeave() {
+    isPointerInside = false;
+    // Retain the last hovered image as expanded until hovering another image
+    if (hoverPill) {
+      hoverPill.classList.remove('visible');
+    }
+  }
+
+  container.addEventListener('pointermove', onPointerMove);
+  container.addEventListener('pointerleave', onPointerLeave);
+
+  // Resize handler
+  function onResize() {
+    if (!container || !renderer || !camera) return;
+    const newWidth = container.clientWidth || Math.round(window.innerWidth * 0.92);
+    const newHeight = container.clientHeight || 320;
+
+    if (newWidth <= 0 || newHeight <= 0) return;
+
+    width = newWidth;
+    height = newHeight;
+
+    camera.left = -width / 2;
+    camera.right = width / 2;
+    camera.top = height / 2;
+    camera.bottom = -height / 2;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    calculateLayout();
+  }
+
+  window.addEventListener('resize', onResize);
+  updateProjects3DLayout = onResize;
+
+  // Filter callback
+  setProjectsFilter = (category) => {
+    items.forEach((item) => {
+      if (category === 'All' || category === 'Featured' || item.data.category.toLowerCase() === category.toLowerCase()) {
+        item.targetOpacity = 1.0;
+      } else {
+        item.targetOpacity = 0.2;
+      }
+    });
+  };
+
+  // Render Loop
+  const clock = new THREE.Clock();
+  let currentPillX = 0;
+  let currentPillY = 0;
+  let pillInitialized = false;
+
+  function animateProjects() {
+    requestAnimationFrame(animateProjects);
+
+    // Auto-detect layout resize if container became visible or resized
+    if (container.clientWidth > 0 && Math.abs(container.clientWidth - width) > 2) {
+      onResize();
+    }
+
+    // Only render if projects section is visible
+    if (projectsSection.style.display === 'none') return;
+
+    const elapsedTime = clock.getElapsedTime();
+
+    items.forEach((item, index) => {
+      // Silky smooth, slower accordion physics for expand and shrink
+      const lerpSpeed = 0.055;
+      item.currentWidth += (item.targetWidth - item.currentWidth) * lerpSpeed;
+      item.currentX += (item.targetX - item.currentX) * lerpSpeed;
+      item.hoverValue += (item.targetHover - item.hoverValue) * lerpSpeed;
+      item.currentOpacity += (item.targetOpacity - item.currentOpacity) * 0.08;
+
+      item.mesh.scale.set(Math.max(1, item.currentWidth), height, 1);
+      item.mesh.position.set(item.currentX, 0, item.hoverValue * 10.0);
+
+      // Uniforms
+      item.material.uniforms.uHover.value = item.hoverValue;
+      item.material.uniforms.uOpacity.value = item.currentOpacity;
+      item.material.uniforms.uTime.value = elapsedTime;
+      if (hoveredIndex === index) {
+        item.material.uniforms.uMouse.value.set(mousePos.x, mousePos.y);
+      }
+    });
+
+    // Cursor-following hover pill with smooth trailing delay on the right side
+    if (hoverPill && isPointerInside && hoveredIndex !== -1) {
+      const offsetRight = 16;
+      let targetPillX = mousePos.canvasX + offsetRight;
+      let targetPillY = mousePos.canvasY;
+
+      // Flip to left if near the right edge of container
+      if (targetPillX + 130 > width) {
+        targetPillX = mousePos.canvasX - offsetRight - 100;
+      }
+
+      if (!pillInitialized) {
+        currentPillX = targetPillX;
+        currentPillY = targetPillY;
+        pillInitialized = true;
+      } else {
+        // 3x trailing delay for smooth cursor inertia
+        const lerpFactor = 0.067;
+        currentPillX += (targetPillX - currentPillX) * lerpFactor;
+        currentPillY += (targetPillY - currentPillY) * lerpFactor;
+      }
+
+      hoverPill.style.left = `${currentPillX}px`;
+      hoverPill.style.top = `${currentPillY}px`;
+    } else {
+      pillInitialized = false;
+      if (hoverPill && hoverPill.classList.contains('visible')) {
+        hoverPill.classList.remove('visible');
+      }
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  animateProjects();
+}
+
+// --- 12. Projects Filter Interaction ---
+function initProjectsFilter() {
+  const filterBtns = document.querySelectorAll('.tf-filter-btn');
+  if (!filterBtns.length) return;
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      filterBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filterCategory = btn.getAttribute('data-filter') || 'All';
+      if (typeof setProjectsFilter === 'function') {
+        setProjectsFilter(filterCategory);
+      }
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initChatWidget();
   initHero3D();
+  initProjects3D();
+  initProjectsFilter();
 });
