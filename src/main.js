@@ -1,57 +1,42 @@
 import './style.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 // Immediately hide UI elements so the page is empty behind the loader mask
 gsap.set('.tf-logo-link, .tf-theme-wrapper, .tf-mobile-menu-wrapper, .hero-title, .hero-subtitle', { opacity: 0, scale: 0.8 });
 gsap.set('.tf-nav-btn', { y: 40, opacity: 0 });
 
-// --- 1. Lenis Smooth Scrolling ---
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  direction: 'vertical',
-  gestureDirection: 'vertical',
-  smooth: true,
-  mouseMultiplier: 1,
-  smoothTouch: false,
-  touchMultiplier: 2,
-  infinite: false,
+// --- 1. GSAP ScrollSmoother (Continuous Transform Damping Lag) ---
+const smoother = ScrollSmoother.create({
+  wrapper: '#smooth-wrapper',
+  content: '#smooth-content',
+  smooth: 1.5, // 1.5s floaty delayed momentum catch-up
+  effects: true,
+  smoothTouch: 0.1
 });
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-lenis.on('scroll', (e) => {
-  ScrollTrigger.update(e);
-  
-  // Prevent chat widget from overlapping footer
-  const footer = document.getElementById('main-footer');
-  const chatWidget = document.getElementById('tf-chat-widget');
-  if (footer && chatWidget) {
-    const footerRect = footer.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    if (footerRect.top < windowHeight) {
-      const overlap = windowHeight - footerRect.top;
-      chatWidget.style.transform = `translateY(-${overlap}px)`;
-    } else {
-      chatWidget.style.transform = `translateY(0px)`;
+ScrollTrigger.create({
+  onUpdate: () => {
+    // Prevent chat widget from overlapping footer
+    const footer = document.getElementById('main-footer');
+    const chatWidget = document.getElementById('tf-chat-widget');
+    if (footer && chatWidget) {
+      const footerRect = footer.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      if (footerRect.top < windowHeight) {
+        const overlap = windowHeight - footerRect.top;
+        chatWidget.style.transform = `translateY(-${overlap}px)`;
+      } else {
+        chatWidget.style.transform = `translateY(0px)`;
+      }
     }
   }
 });
-
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
-gsap.ticker.lagSmoothing(0);
 
 // --- 2. Wave & Superman Page Transition ---
 let isTransitioning = false;
@@ -124,8 +109,12 @@ function playPageTransition(targetSelector = null, isInitial = false) {
       // Show target panel
       targetEl.style.display = 'flex';
       
-      lenis.scrollTo(0, { immediate: true, force: true });
-      window.scrollTo(0, 0);
+      if (smoother) {
+        smoother.scrollTo(0, true);
+      } else {
+        window.scrollTo(0, 0);
+      }
+      ScrollTrigger.refresh();
       updateActiveNav(activeTarget);
 
       if (activeTarget === '#projects' && typeof updateProjects3DLayout === 'function') {
@@ -500,10 +489,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Nav Button Shape Morphing: When any button is hovered, ALL nav buttons toggle their shape together
+  // Nav Button Shape Morphing & Tick Sound: When any button is hovered, ALL nav buttons toggle their shape together
   const navBtns = document.querySelectorAll('.tf-nav-btn, .tf-overlay-btn');
   navBtns.forEach((btn) => {
     btn.addEventListener('mouseenter', () => {
+      playTickSound();
       navBtns.forEach((otherBtn) => {
         if (otherBtn.classList.contains('shape-rect')) {
           otherBtn.classList.remove('shape-rect');
@@ -515,7 +505,62 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Attach tick sound to logo and mobile menu trigger on hover
+  const logoLink = document.querySelector('.tf-logo-link');
+  if (logoLink) {
+    logoLink.addEventListener('mouseenter', () => playTickSound());
+  }
 });
+
+// --- Interactive UI Audio Feedback (Subtle Mechanical Tick) ---
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      audioCtx = new AudioCtx();
+    }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(() => {});
+  }
+  return audioCtx;
+}
+
+function playTickSound() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(1000, now);
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(950, now);
+    osc.frequency.exponentialRampToValueAtTime(160, now + 0.03);
+
+    // Doubled volume (from 0.045 to 0.11) with crisp decay
+    gain.gain.setValueAtTime(0.11, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.035);
+  } catch (e) {}
+}
+
+window.addEventListener('pointerdown', () => getAudioContext(), { once: true });
+window.addEventListener('keydown', () => getAudioContext(), { once: true });
 
 // --- 4. Theme Toggle Logic & Keyboard Shortcut (P) ---
 const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
@@ -527,6 +572,7 @@ if (savedTheme) {
 }
 
 function toggleTheme() {
+  playTickSound();
   if (body.classList.contains('dark-mode')) {
     body.classList.replace('dark-mode', 'light-mode');
     localStorage.setItem('theme', 'light-mode');
@@ -537,6 +583,7 @@ function toggleTheme() {
 }
 
 themeToggleBtns.forEach((btn) => {
+  btn.addEventListener('mouseenter', () => playTickSound());
   btn.addEventListener('click', toggleTheme);
 });
 
@@ -1468,8 +1515,10 @@ function initProjectsFilter() {
   if (!filterBtns.length) return;
 
   filterBtns.forEach((btn) => {
+    btn.addEventListener('mouseenter', () => playTickSound());
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+      playTickSound();
       filterBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       const filterCategory = btn.getAttribute('data-filter') || 'All';
