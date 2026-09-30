@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patrick John - Senior Software Engineer</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="dark-mode">
+    <!-- ToyFight Transition Wave Preloader & Superman Loader -->
+    <div id="transition-mask" class="tf-transition-mask">
+      <div class="tf-mask-blocks">
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+        <div class="tf-mask-block"></div>
+      </div>
+      
+      <!-- Superman Loading Animation -->
+      <div id="superman-loader">
+        <div class="body">
+          <span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <div class="base">
+            <span></span>
+            <div class="face"></div>
+          </div>
+        </div>
+        <div class="longfazers">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="tf-mask-loader">
+        <div class="tf-pill-item" id="pill-loading">
+          <div class="tf-pill-bg"></div>
+          <span class="tf-pill-text">LOADING</span>
+        </div>
+        <div class="tf-pill-item" id="pill-please">
+          <div class="tf-pill-bg"></div>
+          <span class="tf-pill-text">PLEASE</span>
+        </div>
+        <div class="tf-pill-item" id="pill-wait">
+          <div class="tf-pill-bg"></div>
+          <span class="tf-pill-text">WAIT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ToyFight Inspired Header -->
+    <header id="navbar" class="tf-header">
+      <div class="nav-left tf-header-left">
+        <a href="#home" class="tf-logo-link" aria-label="PatrickJohn">
+          <div class="tf-logo-box">
+            <!-- Desktop: Interactive P:\ -> PatrickJohn on hover -->
+            <div class="tf-desktop-logo">
+              <div class="tf-logo-terminal">
+                <span class="tf-prefix">P:</span><span class="tf-blink">\</span>
+              </div>
+              <div class="tf-logo-name-wrapper">
+                <span class="tf-name-part tf-name-patrick">Patrick</span>
+                <span class="tf-name-part tf-name-john">John</span>
+              </div>
+            </div>
+            <!-- Mobile: Static Full PatrickJohn -->
+            <div class="tf-mobile-logo">
+              <span class="tf-logo-text">PatrickJohn</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Center Nav -->
+      <nav class="nav-center tf-header-nav">
+        <ul class="tf-nav-menu" id="tf-nav-menu">
+          <li>
+            <a href="#projects" class="tf-nav-btn shape-rect" aria-label="Projects">
+              <span class="tf-btn-box">
+                <span class="tf-btn-mask">
+                  <span class="tf-btn-slide">Projects</span>
+                  <span class="tf-btn-slide">Projects</span>
+                </span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#experience" class="tf-nav-btn shape-pill" aria-label="Experience">
+              <span class="tf-btn-box">
+                <span class="tf-btn-mask">
+                  <span class="tf-btn-slide">Experience</span>
+                  <span class="tf-btn-slide">Experience</span>
+                </span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#testimonials" class="tf-nav-btn shape-rect" aria-label="Testimonials">
+              <span class="tf-btn-box">
+                <span class="tf-btn-mask">
+                  <span class="tf-btn-slide">Testimonials</span>
+                  <span class="tf-btn-slide">Testimonials</span>
+                </span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#contact" class="tf-nav-btn shape-pill" aria-label="Contact">
+              <span class="tf-btn-box">
+                <span class="tf-btn-mask">
+                  <span class="tf-btn-slide">Contact</span>
+                  <span class="tf-btn-slide">Contact</span>
+                </span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-right tf-header-right">
+        <!-- Desktop Theme Toggle -->
+        <div class="tf-theme-wrapper tf-desktop-theme">
+          <button class="theme-toggle-btn" aria-label="Toggle Theme">
+            <span class="icon-svg icon-moon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            </span>
+            <span class="icon-svg icon-sun" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 3v1" opacity="1"></path>
+                <path d="M12 20v1" opacity="1"></path>
+                <path d="M3 12h1" opacity="1"></path>
+                <path d="M20 12h1" opacity="1"></path>
+                <path d="m18.364 5.636-.707.707" opacity="1"></path>
+                <path d="m6.343 17.657-.707.707" opacity="1"></path>
+                <path d="m5.636 5.636.707.707" opacity="1"></path>
+                <path d="m17.657 17.657.707.707" opacity="1"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="tf-theme-bubble" role="tooltip">
+            <span class="tf-bubble-text">Toggle mode <span class="tf-bubble-key">P</span></span>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Pill Button on Right -->
+        <div class="tf-mobile-menu-wrapper">
+          <button id="mobile-menu-btn" class="tf-mobile-menu-btn" aria-label="Toggle Navigation Menu" aria-expanded="false">
+            <span class="tf-btn-box shape-pill">
+              <span class="tf-btn-mask">
+                <span class="tf-btn-slide tf-slide-menu">Menu</span>
+                <span class="tf-btn-slide tf-slide-close">Close</span>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Full-Screen Mobile Menu Screen -->
+    <div id="tf-mobile-overlay" class="tf-mobile-overlay" aria-hidden="true">
+      <!-- Center Links inside overlay -->
+      <nav class="tf-overlay-nav">
+        <ul class="tf-overlay-menu">
+          <li>
+            <a href="#projects" class="tf-overlay-btn shape-pill">
+              <span class="tf-overlay-btn-box">Projects</span>
+            </a>
+          </li>
+          <li>
+            <a href="#experience" class="tf-overlay-btn shape-pill">
+              <span class="tf-overlay-btn-box">Experience</span>
+            </a>
+          </li>
+          <li>
+            <a href="#testimonials" class="tf-overlay-btn shape-pill">
+              <span class="tf-overlay-btn-box">Testimonials</span>
+            </a>
+          </li>
+          <li>
+            <a href="#contact" class="tf-overlay-btn shape-rect">
+              <span class="tf-overlay-btn-box">Contact</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Theme toggle inside mobile menu screen (Icon only) -->
+        <div class="tf-overlay-theme-wrap">
+          <button class="theme-toggle-btn tf-overlay-theme-btn" aria-label="Toggle Theme">
+            <div class="tf-theme-icon-box">
+              <span class="icon-svg icon-moon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                </svg>
+              </span>
+              <span class="icon-svg icon-sun" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 3v1"></path>
+                  <path d="M12 20v1"></path>
+                  <path d="M3 12h1"></path>
+                  <path d="M20 12h1"></path>
+                </svg>
+              </span>
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Bottom Footer inside overlay -->
+      <div class="tf-overlay-footer">
+        <div class="tf-overlay-footer-section">
+          <span class="tf-footer-badge shape-rect">Follow</span>
+          <div class="tf-footer-links">
+            <a href="https://www.linkedin.com/in/patrickjohn01/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://www.instagram.com/mr.faaj" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+
+        <div class="tf-overlay-footer-section">
+          <div class="tf-footer-badge-group">
+            <span class="tf-footer-badge shape-pill">General</span>
+            <span class="tf-footer-badge shape-pill">Inquiries</span>
+          </div>
+          <a href="mailto:patrick80361@gmail.com" class="tf-footer-email">patrick80361@gmail.com</a>
+        </div>
+
+        <div class="tf-overlay-copyright">
+          &copy; 2026 PatrickJohn&reg; All Rights Reserved
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Wrapper for Lenis -->
+    <main id="main-content">
+      <section id="home" class="panel tf-hero-panel">
+        <div class="tf-hero-3d-container" id="hero-3d-container">
+          <canvas id="hero-webgl-canvas"></canvas>
+        </div>
+        <div class="content hero-content">
+          <h1 class="hero-title">Creative Developer</h1>
+          <p class="hero-subtitle">Bringing ideas to life with code.</p>
+        </div>
+      </section>
+
+      <section id="projects" class="panel tf-projects-section">
+        <div class="tf-projects-header">
+          <div class="tf-projects-title-area">
+            <div class="tf-pill-title">Featured</div>
+            <div class="tf-pill-title">Projects <span class="tf-project-count">(8)</span></div>
+          </div>
+          
+          <div class="tf-projects-filter">
+            <div class="tf-filter-label">FILTER</div>
+            <ul class="tf-filter-list">
+              <li class="active">Featured</li>
+              <li>All</li>
+              <li>Website</li>
+              <li>Marketing</li>
+              <li>eCommerce</li>
+              <li>Branding</li>
+              <li>Content</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tf-projects-carousel">
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=1')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Flim</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=2')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Metropole</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=3')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Drop</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=4')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Gaming Era</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=5')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Pantheon</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=6')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">Animate</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=7')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">3D Avatar</div>
+            </div>
+          </div>
+          <div class="tf-project-item">
+            <div class="tf-project-image" style="background-image: url('https://picsum.photos/800/600?random=8')"></div>
+            <div class="tf-project-info">
+              <div class="tf-project-pill">AnyThing</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tf-projects-footer">
+          Since 2015 - &infin;
+        </div>
+      </section>
+
+      <section id="experience" class="panel">
+        <div class="content">
+          <h2>Experience</h2>
+          <p>Working with the best technologies.</p>
+        </div>
+      </section>
+
+      <section id="testimonials" class="panel">
+        <div class="content">
+          <h2>Testimonials</h2>
+          <p>"Amazing work!"</p>
+        </div>
+      </section>
+
+      <section id="contact" class="panel">
+        <div class="content">
+          <h2>Contact</h2>
+          <a href="mailto:patrick80361@gmail.com" class="contact-btn">Get in touch</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Main Footer -->
+    <footer id="main-footer" class="tf-site-footer">
+      <!-- Top Center Statement Badges -->
+      <div class="tf-footer-hero">
+        <div class="tf-statement-badges">
+          <span class="tf-stat-badge shape-rect">A</span>
+          <span class="tf-stat-badge shape-pill">Creative</span>
+          <span class="tf-stat-badge shape-rect">Original&reg;</span>
+          <span class="tf-stat-badge shape-pill">Design</span>
+          <span class="tf-stat-badge shape-rect">Studio</span>
+        </div>
+      </div>
+
+      <!-- Bottom Row Info Bar -->
+      <div class="tf-footer-bottom-bar">
+        <div class="tf-footer-col tf-footer-left">
+          <span class="tf-footer-copy">&copy;2026 PatrickJohn&reg; All Rights Reserved</span>
+          <a href="#" class="tf-footer-policy">Privacy Policy</a>
+        </div>
+
+        <div class="tf-footer-col tf-footer-center">
+          <span class="tf-footer-badge shape-pill">General Inquiries</span>
+          <a href="mailto:patrick80361@gmail.com" class="tf-footer-email">patrick80361@gmail.com</a>
+        </div>
+
+        <div class="tf-footer-col tf-footer-right">
+          <a href="https://www.linkedin.com/in/patrickjohn01/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.instagram.com/mr.faaj" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Chat Widget (Chat with Patrick) -->
+    <div id="tf-chat-widget" class="tf-chat-widget">
+      <!-- Floating Trigger Button -->
+      <button id="tf-chat-trigger" class="tf-chat-trigger-btn" aria-label="Chat with Patrick">
+        <svg class="tf-chat-bubble-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span class="tf-chat-btn-text">Chat with Patrick</span>
+      </button>
+
+      <!-- Chat Modal Window -->
+      <div id="tf-chat-modal" class="tf-chat-modal" aria-hidden="true">
+        <!-- Header -->
+        <div class="tf-chat-header">
+          <div class="tf-chat-profile">
+            <div class="tf-chat-avatar">
+              <img src="/patrick.jpg" alt="Patrick John" class="tf-avatar-img" />
+              <span class="tf-online-dot"></span>
+            </div>
+            <div class="tf-chat-info">
+              <h4 class="tf-chat-name">Patrick John</h4>
+              <span class="tf-chat-subtitle">ASK ME ANYTHING</span>
+            </div>
+          </div>
+          <div class="tf-chat-actions">
+            <button id="tf-chat-expand-btn" class="tf-chat-action-btn" aria-label="Expand Chat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h6v6"></path>
+                <path d="M9 21H3v-6"></path>
+                <path d="M21 3l-7 7"></path>
+                <path d="M3 21l7-7"></path>
+              </svg>
+            </button>
+            <button id="tf-chat-close-btn" class="tf-chat-action-btn" aria-label="Close Chat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Body / Messages -->
+        <div class="tf-chat-body" id="tf-chat-body">
+          <!-- Suggested Prompts -->
+          <div class="tf-chat-prompts" id="tf-chat-prompts">
+            <button class="tf-prompt-chip" data-prompt="What technologies and tools do you use?">
+              What technologies and tools do you use?
+            </button>
+            <button class="tf-prompt-chip" data-prompt="Tell me about your background & experience.">
+              Tell me about your background & experience.
+            </button>
+            <button class="tf-prompt-chip" data-prompt="How was this site made?">
+              How was this site made?
+            </button>
+            <button class="tf-prompt-chip" data-prompt="How can I get in touch to collaborate?">
+              How can I get in touch to collaborate?
+            </button>
+          </div>
+
+          <!-- Messages Container -->
+          <div class="tf-chat-messages" id="tf-chat-messages"></div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="tf-chat-input-row">
+          <form id="tf-chat-form" class="tf-chat-form">
+            <input type="text" id="tf-chat-input" class="tf-chat-input" placeholder="Ask about my work..." autocomplete="off" />
+            <button type="submit" id="tf-chat-send" class="tf-chat-send-btn" aria-label="Send message">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Close Button below open modal -->
+      <button id="tf-chat-bottom-close" class="tf-chat-bottom-close-btn" style="display: none;" aria-label="Close Chat">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        <span>Close</span>
+      </button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
