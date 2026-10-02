@@ -605,6 +605,103 @@ let isLoaderFinished = false;
 let laptopAnimationAction = null;
 let globalLaptopGroup = null;
 let globalTargetScale = 1;
+let homeIntroTimeline = null;
+
+function initHomeScrollAnimations() {
+  if (homeIntroTimeline) {
+    if (homeIntroTimeline.scrollTrigger) {
+      homeIntroTimeline.scrollTrigger.kill();
+    }
+    homeIntroTimeline.kill();
+    homeIntroTimeline = null;
+  }
+
+  const track = document.getElementById('tf-intro-pinned-track');
+  const wrap = document.getElementById('tf-intro-pinned-wrap');
+  const videoInner = document.getElementById('intro-video-inner');
+  const splitWords = document.querySelectorAll('.tf-split-word');
+  const cards = document.querySelectorAll('.tf-intro-text-col .tf-philosophy-card');
+
+  if (!track || !wrap) return;
+
+  // Set initial hidden / masked transform states
+  gsap.set(splitWords, { yPercent: 120, opacity: 0 });
+  if (videoInner) gsap.set(videoInner, { scale: 0.52, opacity: 0.85 });
+  if (cards.length) gsap.set(cards, { y: 35, opacity: 0 });
+  gsap.set(wrap, { scale: 1, opacity: 1 });
+
+  // Pinned Scrub Timeline for Section 2 Reveal & Exit
+  homeIntroTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: track,
+      start: 'top top',
+      end: '+=160%',
+      pin: wrap,
+      pinSpacing: true,
+      scrub: 1,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+    }
+  });
+
+  // 1. Text words stagger up and reveal
+  homeIntroTimeline.to(splitWords, {
+    yPercent: 0,
+    opacity: 1,
+    duration: 1.0,
+    stagger: 0.025,
+    ease: 'power2.out'
+  }, 0);
+
+  // 2. Video reel card smoothly scales up from 0.52 to 1.0
+  if (videoInner) {
+    homeIntroTimeline.to(videoInner, {
+      scale: 1,
+      opacity: 1,
+      duration: 1.2,
+      ease: 'power2.out'
+    }, 0.05);
+  }
+
+  // 3. Philosophy cards rise up
+  if (cards.length) {
+    homeIntroTimeline.to(cards, {
+      y: 0,
+      opacity: 1,
+      duration: 0.9,
+      stagger: 0.12,
+      ease: 'power2.out'
+    }, 0.3);
+  }
+
+  // 4. Subtle depth scale and dimming on exit as Section 3 enters
+  homeIntroTimeline.to(wrap, {
+    scale: 0.95,
+    opacity: 0.85,
+    duration: 0.6,
+    ease: 'power1.in'
+  }, 1.2);
+
+  // Section 3 (Capabilities) entrance stagger trigger
+  const capsSection = document.querySelector('.tf-capabilities-section');
+  if (capsSection) {
+    gsap.fromTo('.tf-cap-row',
+      { y: 40, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: capsSection,
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out'
+      }
+    );
+  }
+}
 
 function initAnimations(targetSelector = '#home') {
   isLoaderFinished = true;
@@ -627,6 +724,9 @@ function initAnimations(targetSelector = '#home') {
     gsap.to('.hero-title, .hero-subtitle', {
       scale: 1, opacity: 1, duration: 1, delay: 0.5, stagger: 0.1, ease: 'power3.out'
     });
+
+    // Initialize the pinned scroll animation for Section 2
+    initHomeScrollAnimations();
   }
 
   // Logo and Theme toggle zoom in
@@ -671,6 +771,10 @@ function initAnimations(targetSelector = '#home') {
       }
     }
   });
+
+  setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 100);
 }
 
 // --- 6. Chat with Patrick Interactive Widget ---
@@ -1534,4 +1638,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHero3D();
   initProjects3D();
   initProjectsFilter();
+  initHomeScrollAnimations();
 });

@@ -83,7 +83,7 @@ html {
   width: 100%;
 }
 
-/* --- ToyFight Inspired Header --- */
+/* --- Header Navigation --- */
 #navbar.tf-header {
   position: fixed;
   top: 0;
@@ -671,6 +671,8 @@ body.light-mode .nav-right button:hover .icon-sun svg {
   justify-content: center;
   overflow: hidden;
   box-sizing: border-box;
+  z-index: 10;
+  background-color: var(--bg-color);
 }
 
 .tf-hero-3d-container {
@@ -686,66 +688,197 @@ body.light-mode .nav-right button:hover .icon-sun svg {
   justify-content: center;
 }
 
-/* --- Homepage Scrollable Sections --- */
-.tf-home-section {
+/* --- Section 2: Pinned Intro & Reveal Section (Pure Black Background) --- */
+.tf-intro-pinned-track {
   position: relative;
   width: 100%;
-  padding: 120px 5% 100px;
-  box-sizing: border-box;
-  z-index: 2;
+  z-index: 5;
+  background-color: #08080a;
 }
 
-.tf-home-container {
-  max-width: 1200px;
+.tf-intro-pinned-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 5% 80px;
+  box-sizing: border-box;
+  background-color: #08080a;
+  color: #ffffff;
+}
+
+.tf-intro-container {
+  max-width: 1300px;
   margin: 0 auto;
   width: 100%;
 }
 
-.tf-home-label-row {
+.tf-intro-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tf-intro-heading-box {
+  margin-bottom: 24px;
+}
+
+.tf-intro-heading {
+  font-size: clamp(2.2rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -1.5px;
+  color: #ffffff !important;
+  margin: 0;
+}
+
+/* Split-text Word Masks */
+.tf-split-wrapper {
+  display: block;
+}
+
+.tf-split-mask {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  line-height: 1.25;
+}
+
+.tf-split-word {
+  display: inline-block;
+  position: relative;
+  will-change: transform, opacity;
+  white-space: pre-wrap;
+  color: #ffffff;
+}
+
+.tf-intro-spacer {
+  height: 28px;
+}
+
+/* Main Grid: Left Column Text & Cards, Right Column Video Reel */
+.tf-intro-main-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.tf-intro-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.tf-intro-body-wrap {
+  max-width: 680px;
+}
+
+.tf-intro-body {
+  font-size: clamp(1.05rem, 1.35vw, 1.22rem);
+  line-height: 1.6;
+  opacity: 0.88;
+  color: rgba(255, 255, 255, 0.85) !important;
+  margin: 0;
+}
+
+.tf-intro-pinned-wrap .tf-stat-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.tf-intro-pinned-wrap .tf-philosophy-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.tf-intro-pinned-wrap .tf-philosophy-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-6px);
+}
+
+.tf-intro-pinned-wrap .tf-card-title {
+  color: #ffffff !important;
+}
+
+.tf-intro-pinned-wrap .tf-card-desc {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.tf-intro-pinned-wrap .tf-card-num {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Right Video Reel */
+.tf-intro-video-col {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 28px;
+  justify-content: center;
 }
 
-.tf-philosophy-heading {
-  font-size: 2.75rem;
-  line-height: 1.25;
-  letter-spacing: -1px;
-  font-weight: 600;
-  margin-bottom: 60px;
-  max-width: 960px;
-  color: var(--text-color);
+.tf-intro-video-inner {
+  width: 100%;
+  will-change: transform, opacity;
+  transform-origin: center right;
 }
 
-.tf-philosophy-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+.tf-cloudinary-video-box {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+  background: #000000;
 }
 
-.tf-philosophy-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 36px 28px;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
+.tf-video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  display: flex;
 }
 
-body.light-mode .tf-philosophy-card {
-  background: rgba(0, 0, 0, 0.025);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+.tf-reel-video,
+.tf-reel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.tf-philosophy-card:hover {
-  transform: translateY(-6px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+.tf-video-play-badge {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
 }
 
-body.light-mode .tf-philosophy-card:hover {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.16);
+.tf-video-play-badge svg {
+  width: 12px;
+  height: 14px;
+  margin-left: 2px;
 }
 
 .tf-card-num {
@@ -767,6 +900,19 @@ body.light-mode .tf-philosophy-card:hover {
   font-size: 0.92rem;
   line-height: 1.6;
   opacity: 0.75;
+}
+
+@media (max-width: 992px) {
+  .tf-intro-main-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .tf-intro-video-inner {
+    transform-origin: center center;
+  }
+  .tf-philosophy-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Capabilities List */
@@ -949,7 +1095,7 @@ body.light-mode .project-card:hover {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* --- ToyFight Transition Wave Preloader --- */
+/* --- Transition Wave Preloader --- */
 #transition-mask {
   position: fixed;
   top: 0;
@@ -1377,7 +1523,7 @@ body.light-mode .project-card:hover {
   }
 }
 
-/* --- Full-Screen Mobile Menu Screen (ToyFight Inspired) --- */
+/* --- Full-Screen Mobile Menu Screen --- */
 .tf-mobile-overlay {
   position: fixed;
   inset: 0;
@@ -1587,7 +1733,7 @@ body:not(.light-mode) .tf-footer-badge {
   margin-top: 4px;
 }
 
-/* --- Main Site Footer (ToyFight Inspired) --- */
+/* --- Main Site Footer --- */
 .tf-site-footer {
   width: 100%;
   padding: 100px 4% 40px;

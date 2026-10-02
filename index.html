@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body class="light-mode">
-    <!-- ToyFight Transition Wave Preloader & Superman Loader -->
+    <!-- Transition Wave Preloader & Superman Loader -->
     <div id="transition-mask" class="tf-transition-mask">
       <div class="tf-mask-blocks">
         <div class="tf-mask-block"></div>
@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <!-- ToyFight Inspired Header -->
+    <!-- Header Navigation -->
     <header id="navbar" class="tf-header">
       <div class="nav-left tf-header-left">
         <a href="#home" class="tf-logo-link" aria-label="PatrickJohn">
@@ -262,31 +262,81 @@
               </div>
             </div>
 
-            <!-- Section 2: Studio Philosophy & Vision -->
-            <div class="tf-home-section tf-philosophy-section">
-              <div class="tf-home-container">
-                <div class="tf-home-label-row">
-                  <span class="tf-stat-badge shape-rect">About</span>
-                  <span class="tf-stat-badge shape-pill">Philosophy</span>
-                </div>
-                <h2 class="tf-philosophy-heading">
-                  We build distinct digital products, WebGL experiences, and scalable interfaces with relentless attention to detail.
-                </h2>
-                <div class="tf-philosophy-grid">
-                  <div class="tf-philosophy-card">
-                    <span class="tf-card-num">01</span>
-                    <h3 class="tf-card-title">Interactive 3D</h3>
-                    <p class="tf-card-desc">Crafting high-performance WebGL, Three.js shaders, and spatial visuals that run buttery smooth on any screen.</p>
+            <!-- Section 2: Studio Philosophy & Pinned Showcase Section -->
+            <div class="tf-intro-pinned-track" id="tf-intro-pinned-track">
+              <div class="tf-intro-pinned-wrap" id="tf-intro-pinned-wrap">
+                <div class="tf-intro-container">
+                  <div class="tf-home-label-row">
+                    <span class="tf-stat-badge shape-rect">About</span>
+                    <span class="tf-stat-badge shape-pill">Philosophy</span>
                   </div>
-                  <div class="tf-philosophy-card">
-                    <span class="tf-card-num">02</span>
-                    <h3 class="tf-card-title">Tactile Design</h3>
-                    <p class="tf-card-desc">Blending brutalist micro-interactions, responsive typography, and spatial dynamics to make every click feel physical.</p>
-                  </div>
-                  <div class="tf-philosophy-card">
-                    <span class="tf-card-num">03</span>
-                    <h3 class="tf-card-title">Engineered Speed</h3>
-                    <p class="tf-card-desc">Modern frontend architecture built for lightning-fast loads, robust accessibility, and seamless responsiveness.</p>
+
+                  <div class="tf-intro-inner">
+                    <!-- Top Title with Split Word Reveal -->
+                    <div class="tf-intro-heading-box">
+                      <h2 class="tf-intro-heading" aria-label="We Help Our Partners Solve for Today While Building Towards Tomorrow">
+                        <span class="tf-split-wrapper">
+                          <span class="tf-split-mask"><span class="tf-split-word">We</span> <span class="tf-split-word">Help</span> <span class="tf-split-word">Our</span> <span class="tf-split-word">Partners</span> <span class="tf-split-word">Solve</span></span>
+                          <span class="tf-split-mask"><span class="tf-split-word">for</span> <span class="tf-split-word">Today</span> <span class="tf-split-word">While</span> <span class="tf-split-word">Building</span></span>
+                          <span class="tf-split-mask"><span class="tf-split-word">Towards</span> <span class="tf-split-word">Tomorrow</span></span>
+                        </span>
+                      </h2>
+                    </div>
+
+                    <!-- Spacer -->
+                    <div class="tf-intro-spacer"></div>
+
+                    <!-- Main Grid: Left Paragraph & Cards + Right Pinned Video Reel -->
+                    <div class="tf-intro-main-grid">
+                      <!-- Left Text Content & Philosophy Cards -->
+                      <div class="tf-intro-text-col">
+                        <div class="tf-intro-body-wrap">
+                          <p class="tf-intro-body">
+                            <span class="tf-split-wrapper">
+                              <span class="tf-split-mask"><span class="tf-split-word">Concentrated</span> <span class="tf-split-word">on</span> <span class="tf-split-word">crafting</span> <span class="tf-split-word">unparalleled</span> <span class="tf-split-word">experiences</span></span>
+                              <span class="tf-split-mask"><span class="tf-split-word">for</span> <span class="tf-split-word">brands</span> <span class="tf-split-word">through</span> <span class="tf-split-word">strategy,</span> <span class="tf-split-word">tactile</span> <span class="tf-split-word">design,</span></span>
+                              <span class="tf-split-mask"><span class="tf-split-word">interactive</span> <span class="tf-split-word">3D,</span> <span class="tf-split-word">and</span> <span class="tf-split-word">high-performance</span> <span class="tf-split-word">engineering.</span></span>
+                              <span class="tf-split-mask"><span class="tf-split-word">Culminating</span> <span class="tf-split-word">in</span> <span class="tf-split-word">work</span> <span class="tf-split-word">that’s</span> <span class="tf-split-word">as</span> <span class="tf-split-word">bold</span> <span class="tf-split-word">as</span> <span class="tf-split-word">it</span> <span class="tf-split-word">is</span> <span class="tf-split-word">unmistakably</span> <span class="tf-split-word">original.</span></span>
+                            </span>
+                          </p>
+                        </div>
+
+                        <div class="tf-philosophy-grid">
+                          <div class="tf-philosophy-card">
+                            <span class="tf-card-num">01</span>
+                            <h3 class="tf-card-title">Interactive 3D</h3>
+                            <p class="tf-card-desc">Crafting high-performance WebGL, Three.js shaders, and spatial visuals that run buttery smooth on any screen.</p>
+                          </div>
+                          <div class="tf-philosophy-card">
+                            <span class="tf-card-num">02</span>
+                            <h3 class="tf-card-title">Tactile Design</h3>
+                            <p class="tf-card-desc">Blending brutalist micro-interactions, responsive typography, and spatial dynamics to make every click feel physical.</p>
+                          </div>
+                          <div class="tf-philosophy-card">
+                            <span class="tf-card-num">03</span>
+                            <h3 class="tf-card-title">Engineered Speed</h3>
+                            <p class="tf-card-desc">Modern frontend architecture built for lightning-fast loads, robust accessibility, and seamless responsiveness.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Right Scaling Showcase Image Card -->
+                      <div class="tf-intro-video-col">
+                        <div class="tf-intro-video-inner" id="intro-video-inner">
+                          <div class="tf-cloudinary-video-box">
+                            <div class="tf-video-embed">
+                              <img src="/intro-showcase.jpg" alt="Featured Work Showcase" class="tf-reel-img tf-reel-video" loading="eager" />
+                              <div class="tf-video-play-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 12" aria-hidden="true" focusable="false">
+                                  <path d="M9.99609 5.62917L0.148919 11.2583L0.148919 -4.26186e-07L9.99609 5.62917Z" fill="currentColor"></path>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
