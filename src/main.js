@@ -606,101 +606,200 @@ let laptopAnimationAction = null;
 let globalLaptopGroup = null;
 let globalTargetScale = 1;
 let homeIntroTimeline = null;
+let homeVideoGrowTrigger = null;
+let mobileScrollTriggers = [];
 
 function initHomeScrollAnimations() {
   if (homeIntroTimeline) {
     if (homeIntroTimeline.scrollTrigger) {
-      homeIntroTimeline.scrollTrigger.kill();
+      homeIntroTimeline.scrollTrigger.kill(true);
     }
     homeIntroTimeline.kill();
     homeIntroTimeline = null;
   }
+  if (homeVideoGrowTrigger) {
+    if (homeVideoGrowTrigger.scrollTrigger) {
+      homeVideoGrowTrigger.scrollTrigger.kill(true);
+    }
+    homeVideoGrowTrigger.kill();
+    homeVideoGrowTrigger = null;
+  }
+  if (mobileScrollTriggers.length) {
+    mobileScrollTriggers.forEach((st) => {
+      if (st.scrollTrigger) {
+        st.scrollTrigger.kill(true);
+      }
+      st.kill();
+    });
+    mobileScrollTriggers = [];
+  }
 
-  const track = document.getElementById('tf-intro-pinned-track');
+  const home = document.getElementById('home');
+  const heroScreen = document.getElementById('tf-hero-screen');
   const wrap = document.getElementById('tf-intro-pinned-wrap');
   const videoInner = document.getElementById('intro-video-inner');
-  const splitWords = document.querySelectorAll('.tf-split-word');
-  const cards = document.querySelectorAll('.tf-intro-text-col .tf-philosophy-card');
 
-  if (!track || !wrap) return;
+  if (!home || !heroScreen || !wrap || !videoInner) return;
 
-  // Set initial hidden / masked transform states
-  gsap.set(splitWords, { yPercent: 120, opacity: 0 });
-  if (videoInner) gsap.set(videoInner, { scale: 0.52, opacity: 0.85 });
-  if (cards.length) gsap.set(cards, { y: 35, opacity: 0 });
-  gsap.set(wrap, { scale: 1, opacity: 1 });
+  const isMobile = window.innerWidth <= 767;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
 
-  // Pinned Scrub Timeline for Section 2 Reveal & Exit
+  if (isMobile) {
+    // Clear desktop pinning/curtain properties
+    gsap.set([heroScreen, wrap, home], { clearProps: 'all' });
+    gsap.set('.tf-cap-row', { opacity: 1, y: 0 });
+
+    const headingBox = document.getElementById('tf-intro-heading-box');
+    const serifCol = document.getElementById('tf-intro-serif-col');
+    const videoCol = document.getElementById('tf-intro-right-col') || videoInner;
+    const topRow = document.querySelector('.tf-intro-top-row') || headingBox;
+
+    // Video starts at 75% of its size
+    gsap.set(videoInner, {
+      scale: 0.75,
+      transformOrigin: 'center center'
+    });
+
+    // Texts start lower with 0 opacity
+    if (headingBox) gsap.set(headingBox, { y: 60, opacity: 0 });
+    if (serifCol) gsap.set(serifCol, { y: 60, opacity: 0 });
+
+    // Step 1: User has to scroll down more before triggering the large text
+    if (headingBox) {
+      const headingTween = gsap.fromTo(headingBox,
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          ease: 'power1.out',
+          scrollTrigger: {
+            trigger: topRow,
+            start: 'top 75%',
+            end: 'top 40%',
+            scrub: 0.8,
+            invalidateOnRefresh: true,
+          }
+        }
+      );
+      mobileScrollTriggers.push(headingTween);
+    }
+
+    // Step 2: Then scrolling down more into the video expands it from 75% to 100%
+    const videoTween = gsap.fromTo(videoInner,
+      { scale: 0.75, transformOrigin: 'center center' },
+      {
+        scale: 1.0,
+        transformOrigin: 'center center',
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: videoCol,
+          start: 'top 75%',
+          end: 'top 35%',
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        }
+      }
+    );
+    mobileScrollTriggers.push(videoTween);
+
+    // Step 3: Then scrolling down further into the smaller text under the video floats it up
+    if (serifCol) {
+      const serifTween = gsap.fromTo(serifCol,
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          ease: 'power1.out',
+          scrollTrigger: {
+            trigger: serifCol,
+            start: 'top 80%',
+            end: 'top 50%',
+            scrub: 0.8,
+            invalidateOnRefresh: true,
+          }
+        }
+      );
+      mobileScrollTriggers.push(serifTween);
+    }
+
+    // Once finished, scrolling further does not shrink video or hide text
+    return;
+  }
+
+  if (isTablet) {
+    gsap.set([heroScreen, wrap, home], { clearProps: 'all' });
+    gsap.set(videoInner, { clearProps: 'all' });
+    gsap.set('.tf-cap-row', { opacity: 1, y: 0 });
+    const headingBox = document.getElementById('tf-intro-heading-box');
+    const serifCol = document.getElementById('tf-intro-serif-col');
+    if (headingBox) gsap.set(headingBox, { clearProps: 'all' });
+    if (serifCol) gsap.set(serifCol, { clearProps: 'all' });
+    return;
+  }
+
+  // Initial states for desktop:
+  const headingBox = document.getElementById('tf-intro-heading-box');
+  const serifCol = document.getElementById('tf-intro-serif-col');
+  if (headingBox) gsap.set(headingBox, { clearProps: 'all' });
+  if (serifCol) gsap.set(serifCol, { clearProps: 'all' });
+
+  gsap.set(heroScreen, { yPercent: 0, opacity: 1 });
+  gsap.set(wrap, { yPercent: 0, opacity: 1 });
+  gsap.set(videoInner, { scale: 0.52, transformOrigin: 'right bottom' });
+  gsap.set('.tf-cap-row', { opacity: 1, y: 0 });
+
+  // Pinned Scrub Timeline on #home:
+  // - Starts as user begins scrolling down from top
+  // - First section (Hero) acts as Curtain 1 lifting up
+  // - Revealing Section 2 from the bottom first (editorial serif text & video shown first)
+  // - The top headline ("We Help Our Partners Solve...") stays hidden behind Hero curtain until it finishes lifting
+  // - Video grows in size from 0.52 to 1.0 with bottom locked to the baseline of text on its left
+  // - User can view Section 2 fully
+  // - Section 2 acts as Curtain 2 lifting up while video shrinks back to 0.52
+  // - Revealing Section 3 (Capabilities) already sitting underneath
+  // Pinned Scrub Master Timeline on #home:
+  // Continuous scroll with ZERO dead pauses so scrolling always yields immediate visual feedback
   homeIntroTimeline = gsap.timeline({
     scrollTrigger: {
-      trigger: track,
+      trigger: home,
       start: 'top top',
       end: '+=160%',
-      pin: wrap,
+      pin: true,
       pinSpacing: true,
-      scrub: 1,
+      scrub: 0.8,
       anticipatePin: 1,
       invalidateOnRefresh: true,
     }
   });
 
-  // 1. Text words stagger up and reveal
-  homeIntroTimeline.to(splitWords, {
-    yPercent: 0,
-    opacity: 1,
+  // Phase 1: Hero lifts up like a curtain, bottom of Section 2 reveals first, video grows from 0.52 to 1.0
+  homeIntroTimeline.to(heroScreen, {
+    yPercent: -105,
     duration: 1.0,
-    stagger: 0.025,
-    ease: 'power2.out'
+    ease: 'none'
   }, 0);
 
-  // 2. Video reel card smoothly scales up from 0.52 to 1.0
-  if (videoInner) {
-    homeIntroTimeline.to(videoInner, {
-      scale: 1,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power2.out'
-    }, 0.05);
-  }
+  homeIntroTimeline.to(videoInner, {
+    scale: 1.0,
+    transformOrigin: 'right bottom',
+    duration: 1.0,
+    ease: 'none'
+  }, 0);
 
-  // 3. Philosophy cards rise up
-  if (cards.length) {
-    homeIntroTimeline.to(cards, {
-      y: 0,
-      opacity: 1,
-      duration: 0.9,
-      stagger: 0.12,
-      ease: 'power2.out'
-    }, 0.3);
-  }
+  // Phase 2 (Immediately continuous - zero dead pause):
+  // Section 2 lifts up like Curtain 2, video shrinks back to 0.52, uncovering Section 3 underneath
+  homeIntroTimeline.to(videoInner, {
+    scale: 0.52,
+    transformOrigin: 'right bottom',
+    duration: 1.0,
+    ease: 'none'
+  }, 1.0);
 
-  // 4. Subtle depth scale and dimming on exit as Section 3 enters
   homeIntroTimeline.to(wrap, {
-    scale: 0.95,
-    opacity: 0.85,
-    duration: 0.6,
-    ease: 'power1.in'
-  }, 1.2);
-
-  // Section 3 (Capabilities) entrance stagger trigger
-  const capsSection = document.querySelector('.tf-capabilities-section');
-  if (capsSection) {
-    gsap.fromTo('.tf-cap-row',
-      { y: 40, opacity: 0 },
-      {
-        scrollTrigger: {
-          trigger: capsSection,
-          start: 'top 75%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out'
-      }
-    );
-  }
+    yPercent: -105,
+    duration: 1.0,
+    ease: 'none'
+  }, 1.0);
 }
 
 function initAnimations(targetSelector = '#home') {
@@ -904,6 +1003,184 @@ function initChatWidget() {
   }
 }
 
+// --- 6.5 Interactive Dots Grid Background with Mouse Repulsion ---
+function initHeroDots() {
+  const canvas = document.getElementById('hero-dots-canvas');
+  const heroScreen = document.getElementById('tf-hero-screen');
+  const heroSection = document.getElementById('home');
+  if (!canvas || !heroScreen) return;
+
+  const ctx = canvas.getContext('2d');
+  let width = 0;
+  let height = 0;
+  let dots = [];
+  const spacing = 38; // Distance between grid dots in px
+  const repulsionRadius = 68; // Radius where dots stay away from pointer (50% smaller)
+  let isVisible = true;
+  let animFrameId = null;
+
+  const mouse = {
+    x: -9999,
+    y: -9999,
+    targetX: -9999,
+    targetY: -9999,
+    isActive: false
+  };
+
+  function createGrid() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = heroScreen.clientWidth || window.innerWidth;
+    height = heroScreen.clientHeight || window.innerHeight;
+
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    dots = [];
+    const cols = Math.ceil(width / spacing) + 1;
+    const rows = Math.ceil(height / spacing) + 1;
+    const offsetX = (width - (cols - 1) * spacing) / 2;
+    const offsetY = (height - (rows - 1) * spacing) / 2;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const ox = offsetX + c * spacing;
+        const oy = offsetY + r * spacing;
+        dots.push({
+          originX: ox,
+          originY: oy,
+          x: ox,
+          y: oy,
+          proximity: 0
+        });
+      }
+    }
+  }
+
+  function onMouseMove(e) {
+    if (!isVisible) return;
+    const rect = heroScreen.getBoundingClientRect();
+    if (
+      e.clientX >= rect.left &&
+      e.clientX <= rect.right &&
+      e.clientY >= rect.top &&
+      e.clientY <= rect.bottom
+    ) {
+      mouse.targetX = e.clientX - rect.left;
+      mouse.targetY = e.clientY - rect.top;
+      mouse.isActive = true;
+    } else {
+      mouse.targetX = -9999;
+      mouse.targetY = -9999;
+      mouse.isActive = false;
+    }
+  }
+
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
+  window.addEventListener('mouseleave', () => {
+    mouse.targetX = -9999;
+    mouse.targetY = -9999;
+    mouse.isActive = false;
+  });
+
+  window.addEventListener('resize', createGrid);
+
+  // Pause rendering when hero is not visible
+  if (heroSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animFrameId) {
+          render();
+        }
+      });
+    }, { threshold: 0.01 });
+    observer.observe(heroSection);
+  }
+
+  createGrid();
+
+  function render() {
+    if (!isVisible) {
+      animFrameId = null;
+      return;
+    }
+
+    if (mouse.isActive) {
+      mouse.x += (mouse.targetX - mouse.x) * 0.22;
+      mouse.y += (mouse.targetY - mouse.y) * 0.22;
+    } else {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    const isLight = document.body.classList.contains('light-mode');
+    const baseColor = isLight ? 'rgba(0, 0, 0, 0.16)' : 'rgba(255, 255, 255, 0.15)';
+    const baseRadius = 1.8;
+    const activeRadius = 2.7;
+
+    // Single-batch path for resting dots
+    ctx.beginPath();
+    ctx.fillStyle = baseColor;
+    const repelledDots = [];
+
+    for (let i = 0; i < dots.length; i++) {
+      const dot = dots[i];
+
+      const dx = dot.originX - mouse.x;
+      const dy = dot.originY - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      let targetX = dot.originX;
+      let targetY = dot.originY;
+      let targetProximity = 0;
+
+      if (dist < repulsionRadius && mouse.isActive) {
+        const angle = Math.atan2(dy, dx);
+        const force = 1 - dist / repulsionRadius;
+        const push = (repulsionRadius - dist) + Math.pow(force, 1.2) * 6;
+        targetX = dot.originX + Math.cos(angle) * push;
+        targetY = dot.originY + Math.sin(angle) * push;
+        targetProximity = Math.min(1, force * 1.35);
+      }
+
+      dot.x += (targetX - dot.x) * 0.18;
+      dot.y += (targetY - dot.y) * 0.18;
+      dot.proximity += (targetProximity - dot.proximity) * 0.18;
+
+      if (dot.proximity > 0.04) {
+        repelledDots.push(dot);
+      } else {
+        ctx.moveTo(dot.x + baseRadius, dot.y);
+        ctx.arc(dot.x, dot.y, baseRadius, 0, Math.PI * 2);
+      }
+    }
+    ctx.fill();
+
+    // Render repelled dots with reddish glow
+    for (let j = 0; j < repelledDots.length; j++) {
+      const dot = repelledDots[j];
+      const r = baseRadius + (activeRadius - baseRadius) * dot.proximity;
+      const alpha = isLight 
+        ? 0.2 + dot.proximity * 0.8 
+        : 0.25 + dot.proximity * 0.75;
+      
+      ctx.beginPath();
+      ctx.arc(dot.x, dot.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(235, 52, 62, ${alpha})`;
+      ctx.fill();
+    }
+
+    animFrameId = requestAnimationFrame(render);
+  }
+
+  render();
+}
+
 // --- 7. Interactive 3D Laptop in Homepage Hero Section ---
 function initHero3D() {
   const canvas = document.getElementById('hero-webgl-canvas');
@@ -975,12 +1252,21 @@ function initHero3D() {
       laptopModel.position.y -= center.y;
       laptopModel.position.z -= center.z;
 
-      // Auto-scale to fit hero viewport perfectly (responsive on mobile)
+      // Auto-scale to fit hero viewport perfectly (responsive on mobile, tablet, desktop)
+      function getLaptopBaseDim(w, h) {
+        if (w <= 600) {
+          return 1.4; // Mobile phone
+        }
+        if (w <= 1024 || (w <= 1180 && h > w)) {
+          // Tablet: reduced by 25% compared to desktop
+          return 2.4375 * 0.75;
+        }
+        return 2.4375; // Desktop
+      }
+
       const maxDim = Math.max(size.x, size.y, size.z);
       window.laptopMaxDim = maxDim;
-      const isMobile = window.innerWidth <= 768;
-      // Increased desktop base dimension by 25%
-      const baseDim = isMobile ? 1.4 : 2.4375;
+      const baseDim = getLaptopBaseDim(width, height);
       const targetScale = (maxDim > 0 ? baseDim / maxDim : 1) * 0.75;
       
       globalLaptopGroup = laptopGroup;
@@ -1075,8 +1361,8 @@ function initHero3D() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     if (typeof globalLaptopGroup !== 'undefined' && globalLaptopGroup && window.laptopMaxDim) {
-      const isMobile = window.innerWidth <= 768;
-      const baseDim = isMobile ? 1.4 : 2.4375;
+      const isMobile = w <= 600;
+      const baseDim = getLaptopBaseDim(w, h);
       let targetScale = (window.laptopMaxDim > 0 ? baseDim / window.laptopMaxDim : 1) * 0.75;
       
       if (isMobile && h > 0) {
@@ -1084,6 +1370,7 @@ function initHero3D() {
          targetScale *= (baselineH / h);
       }
       
+      globalTargetScale = targetScale;
       globalLaptopGroup.scale.set(targetScale, targetScale, targetScale);
     }
   }
@@ -1635,8 +1922,16 @@ function initProjectsFilter() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initChatWidget();
+  initHeroDots();
   initHero3D();
   initProjects3D();
   initProjectsFilter();
   initHomeScrollAnimations();
+
+  window.addEventListener('resize', () => {
+    clearTimeout(window.__homeScrollResizeTimer);
+    window.__homeScrollResizeTimer = setTimeout(() => {
+      initHomeScrollAnimations();
+    }, 200);
+  });
 });

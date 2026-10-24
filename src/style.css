@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&family=Geist:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 @font-face {
   font-family: 'PixelatedElegance';
@@ -286,7 +286,7 @@ body.menu-open.light-mode .tf-logo-box {
   cursor: pointer;
   outline: none;
   color: var(--text-color);
-  font-family: 'Geist', sans-serif;
+  font-family: 'PixelatedElegance', monospace, sans-serif !important;
 }
 
 .tf-mobile-menu-btn .tf-btn-box {
@@ -384,10 +384,11 @@ body.light-mode .tf-nav-btn:hover .tf-btn-box {
 
 .tf-btn-slide {
   display: block;
-  font-size: 0.75rem;
+  font-family: 'PixelatedElegance', monospace, sans-serif !important;
+  font-size: 0.72rem;
   font-weight: normal;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   line-height: 16px;
   transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
   color: var(--text-color);
@@ -652,27 +653,39 @@ body.light-mode .nav-right button:hover .icon-sun svg {
 
 #home.tf-hero-panel {
   position: relative;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+  overflow: hidden;
   width: 100%;
+  height: 100vh;
   min-height: 100svh;
-  align-items: stretch;
-  justify-content: flex-start;
+  background-color: var(--bg-color);
+  padding: 0 !important;
 }
 
 .tf-hero-screen {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   box-sizing: border-box;
-  z-index: 10;
+  z-index: 30;
   background-color: var(--bg-color);
+  will-change: transform;
+}
+
+.tf-hero-dots-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .tf-hero-3d-container {
@@ -688,50 +701,88 @@ body.light-mode .nav-right button:hover .icon-sun svg {
   justify-content: center;
 }
 
-/* --- Section 2: Pinned Intro & Reveal Section (Pure Black Background) --- */
-.tf-intro-pinned-track {
-  position: relative;
-  width: 100%;
-  z-index: 5;
-  background-color: #08080a;
-}
-
+/* Layer 2: Section 2 ToyFight Intro (Curtain 2, z-index: 20) */
 .tf-intro-pinned-wrap {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 5% 80px;
+  padding: 40px 4% 50px;
   box-sizing: border-box;
   background-color: #08080a;
   color: #ffffff;
+  overflow: hidden;
+  z-index: 20;
+  will-change: transform;
+}
+
+/* Layer 3: Section 3 Capabilities (Sitting underneath, z-index: 10) */
+.tf-capabilities-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 4% 50px;
+  box-sizing: border-box;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  z-index: 10;
+  overflow: hidden;
 }
 
 .tf-intro-container {
-  max-width: 1300px;
-  margin: 0 auto;
   width: 100%;
-}
-
-.tf-intro-inner {
+  max-width: 100%;
+  margin: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.tf-home-container {
   width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Top Row: Big Pixelated Heading (Aligned right across the screen) */
+.tf-intro-top-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: clamp(20px, 4vh, 48px);
 }
 
 .tf-intro-heading-box {
-  margin-bottom: 24px;
+  max-width: 960px;
+  text-align: right;
+  margin-left: auto;
+  will-change: transform, opacity;
 }
 
-.tf-intro-heading {
-  font-size: clamp(2.2rem, 3.8vw, 3.6rem);
-  font-weight: 700;
-  line-height: 1.16;
-  letter-spacing: -1.5px;
+.tf-intro-heading.font-pixel,
+.tf-intro-heading.font-pixel *,
+.tf-intro-heading.font-pixel .tf-split-word {
+  font-family: 'PixelatedElegance', monospace, sans-serif !important;
+  font-size: clamp(2.4rem, 4vw, 4.4rem);
+  font-weight: normal;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
   color: #ffffff !important;
   margin: 0;
+  text-transform: none;
 }
 
 /* Split-text Word Masks */
@@ -754,98 +805,95 @@ body.light-mode .nav-right button:hover .icon-sun svg {
   color: #ffffff;
 }
 
-.tf-intro-spacer {
-  height: 28px;
-}
-
-/* Main Grid: Left Column Text & Cards, Right Column Video Reel */
+/* Main Grid: Left Serif Text Column & Right Video / Showcase Column */
 .tf-intro-main-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 48px;
-  align-items: flex-start;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: flex-end;
   width: 100%;
+  padding-bottom: clamp(16px, 3vh, 32px);
 }
 
-.tf-intro-text-col {
+/* Left Column: Pinned Serif Editorial Statement */
+.tf-intro-serif-col {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  justify-content: flex-end;
+  max-width: 620px;
 }
 
-.tf-intro-body-wrap {
-  max-width: 680px;
+.tf-intro-serif-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.tf-intro-body {
-  font-size: clamp(1.05rem, 1.35vw, 1.22rem);
-  line-height: 1.6;
-  opacity: 0.88;
-  color: rgba(255, 255, 255, 0.85) !important;
+.tf-intro-serif-p {
+  font-family: 'Newsreader', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.28rem, 1.85vw, 2.05rem);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: #FAF6EF !important;
+  opacity: 0.96;
   margin: 0;
+  text-wrap: pretty;
 }
 
-.tf-intro-pinned-wrap .tf-stat-badge {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+.tf-intro-serif-secondary {
+  opacity: 0.92;
 }
 
-.tf-intro-pinned-wrap .tf-philosophy-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+/* Right Column: Video Showcase */
+.tf-intro-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
 
-.tf-intro-pinned-wrap .tf-philosophy-card:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-6px);
-}
-
-.tf-intro-pinned-wrap .tf-card-title {
-  color: #ffffff !important;
-}
-
-.tf-intro-pinned-wrap .tf-card-desc {
-  color: rgba(255, 255, 255, 0.72) !important;
-}
-
-.tf-intro-pinned-wrap .tf-card-num {
-  color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* Right Video Reel */
 .tf-intro-video-col {
   position: relative;
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
 }
 
 .tf-intro-video-inner {
   width: 100%;
+  max-width: 600px;
   will-change: transform, opacity;
-  transform-origin: center right;
+  transform-origin: bottom right;
+  transform: scale(0.52);
+  margin: 0;
 }
 
+/* Showcase Video Box with ToyFight Beige Backing & Centered Frosted Play Button */
 .tf-cloudinary-video-box {
   position: relative;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
-  background: #000000;
+  background-color: #d7c9b8;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
 }
 
 .tf-video-embed {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 10.2;
   overflow: hidden;
   display: flex;
+  background-color: #111111;
 }
 
 .tf-reel-video,
@@ -856,62 +904,373 @@ body.light-mode .nav-right button:hover .icon-sun svg {
   display: block;
 }
 
+/* Centered Pill Frosted Glass Play Badge */
 .tf-video-play-badge {
   position: absolute;
-  bottom: 18px;
-  right: 18px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  padding: 16px 36px;
+  border-radius: 14px;
+  background: rgba(230, 227, 223, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  color: #FAF6EF;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  z-index: 2;
 }
 
 .tf-video-play-badge svg {
-  width: 12px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   margin-left: 2px;
 }
 
-.tf-card-num {
-  display: inline-block;
-  font-family: 'PixelatedElegance', monospace, sans-serif !important;
+.tf-video-play-badge:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: rgba(230, 227, 223, 0.32);
+}
+
+/* Bottom Right Position/Award Tags (Screenshots 5) */
+.tf-intro-tags-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  will-change: transform, opacity;
+}
+
+.tf-intro-tags-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+}
+
+.tf-intro-tag-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tf-tag-pill {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.tf-tag-pill.tag-yellow {
+  background-color: #FFF490;
+  color: #0D0D0E;
+}
+
+.tf-tag-pill.tag-peach {
+  background-color: #FDEDD4;
+  color: #0D0D0E;
+}
+
+.tf-tag-pill.tag-purple {
+  background-color: #E9E3F3;
+  color: #0D0D0E;
+}
+
+.tf-tag-link {
+  font-family: 'Geist', sans-serif;
   font-size: 13px;
-  opacity: 0.5;
-  margin-bottom: 18px;
+  color: #FAF6EF;
+  text-decoration: none;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
 }
 
-.tf-card-title {
-  font-size: 1.35rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--text-color);
+.tf-tag-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  transform: translateX(-2px);
 }
 
-.tf-card-desc {
-  font-size: 0.92rem;
-  line-height: 1.6;
-  opacity: 0.75;
+body.light-mode .tf-tag-link {
+  color: #111111;
+  background: rgba(0, 0, 0, 0.06);
 }
 
-@media (max-width: 992px) {
+body.light-mode .tf-tag-link:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: #000000;
+}
+
+/* Common natural flow for mobile and tablet (<= 1024px) */
+@media (max-width: 1024px) {
+  #home.tf-hero-panel {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .tf-hero-screen {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .tf-intro-pinned-wrap {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    background-color: #08080a !important;
+    box-sizing: border-box !important;
+  }
+
+  .tf-capabilities-section {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 64px 6% 80px !important;
+    margin: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    display: block !important;
+  }
+
+  .tf-intro-tags-list {
+    align-items: flex-start !important;
+  }
+}
+
+/* --- TABLET ONLY (768px - 1024px) --- */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tf-intro-pinned-wrap {
+    min-height: auto !important;
+    padding: 140px 6% 90px !important;
+    display: block !important;
+  }
+
+  .tf-intro-container {
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 48px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Top Large Text: Aligned right, reduced text size like mockup */
+  .tf-intro-top-row {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
+  }
+
+  .tf-intro-heading-box {
+    width: auto !important;
+    max-width: 580px !important;
+    text-align: right !important;
+    margin-left: auto !important;
+  }
+
+  .tf-intro-heading.font-pixel,
+  .tf-intro-heading.font-pixel *,
+  .tf-intro-heading.font-pixel .tf-split-word {
+    text-align: right !important;
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* Main Grid: 2 columns side-by-side like mockup */
   .tf-intro-main-grid {
-    grid-template-columns: 1fr;
-    gap: 36px;
+    display: grid !important;
+    grid-template-columns: 1.15fr 0.85fr !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    width: 100% !important;
+    padding-bottom: 0 !important;
+    margin: 0 !important;
   }
+
+  /* Left Column: Founded in 2015 text, reduced text size like mockup */
+  .tf-intro-serif-col {
+    width: 100% !important;
+    max-width: 420px !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .tf-intro-serif-body {
+    text-align: left !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .tf-intro-serif-p {
+    text-align: left !important;
+    font-size: clamp(0.92rem, 1.6vw, 1.12rem) !important;
+    line-height: 1.48 !important;
+  }
+
+  /* Right Column: Video on the right, reduced size like mockup */
+  .tf-intro-right-col {
+    width: 100% !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tf-intro-video-col {
+    width: 100% !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   .tf-intro-video-inner {
-    transform-origin: center center;
+    width: 100% !important;
+    max-width: 320px !important;
+    transform: none !important;
+    margin: 0 !important;
   }
-  .tf-philosophy-grid {
-    grid-template-columns: 1fr;
+}
+
+/* --- MOBILE PHONE ONLY (<= 767px) --- */
+@media (max-width: 767px) {
+  .tf-intro-pinned-wrap {
+    min-height: auto !important;
+    padding: 72px 6% 64px !important;
+    display: block !important;
+  }
+
+  .tf-intro-container {
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Top Large Text: Align Right */
+  .tf-intro-top-row {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
+  }
+
+  .tf-intro-heading-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: right !important;
+    margin-left: auto !important;
+  }
+
+  .tf-intro-heading.font-pixel,
+  .tf-intro-heading.font-pixel *,
+  .tf-intro-heading.font-pixel .tf-split-word {
+    text-align: right !important;
+    font-size: clamp(1.85rem, 6.5vw, 2.8rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Main Grid: flex column-reverse moves video (right-col) BETWEEN top text and bottom text */
+  .tf-intro-main-grid {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 32px !important;
+    width: 100% !important;
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Video in middle: 100% natural size, no shrink and grow effect */
+  .tf-intro-right-col {
+    width: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tf-intro-video-col {
+    width: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .tf-intro-video-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    transform-origin: center center;
+    margin: 0 !important;
+  }
+
+  /* Bottom Text: Align Left */
+  .tf-intro-serif-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+
+  .tf-intro-serif-body {
+    text-align: left !important;
+    align-items: flex-start !important;
+    gap: 1.25rem !important;
+  }
+
+  .tf-intro-serif-p {
+    text-align: left !important;
+    font-size: clamp(1.15rem, 4vw, 1.45rem) !important;
+    line-height: 1.5 !important;
   }
 }
 
@@ -1595,10 +1954,11 @@ body.light-mode .tf-mobile-overlay {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
-  font-family: 'Geist', sans-serif;
-  font-size: 1.4rem;
-  letter-spacing: 1px;
+  padding: 12px 24px;
+  font-family: 'PixelatedElegance', monospace, sans-serif !important;
+  font-size: 1.15rem;
+  letter-spacing: 1.2px;
+  line-height: 1;
   color: #000000 !important;
   background: #ffffff !important;
   border-radius: inherit;
@@ -1651,6 +2011,21 @@ body.light-mode .tf-mobile-overlay {
 .tf-overlay-theme-btn:hover {
   transform: scale(1.1);
   background: #f0f0f0 !important;
+}
+
+.tf-overlay-theme-btn .tf-theme-icon-box {
+  width: 18px;
+  height: 18px;
+}
+
+.tf-overlay-theme-btn .icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.tf-overlay-theme-btn .icon-svg svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Overlay Footer */
@@ -1951,6 +2326,14 @@ body:not(.light-mode) .tf-site-footer {
   align-items: flex-end;
   font-family: 'Geist', sans-serif;
   pointer-events: auto;
+}
+
+/* Hide chat widget when mobile navigation menu is open */
+body.menu-open .tf-chat-widget {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
 .tf-chat-trigger-btn {
@@ -2735,8 +3118,12 @@ body.dark-mode .tf-projects-footer {
 .tf-pill-title,
 .tf-filter-btn,
 .tf-filter-btn .tf-btn-slide,
+.tf-btn-slide,
+.tf-nav-btn,
+.tf-mobile-menu-btn,
+.tf-overlay-btn .tf-overlay-btn-box,
 .tf-projects-footer,
 .hero-title,
 .hero-subtitle {
-  font-family: 'PixelatedElegance', sans-serif !important;
+  font-family: 'PixelatedElegance', monospace, sans-serif !important;
 }
